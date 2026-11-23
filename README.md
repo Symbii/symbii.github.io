@@ -1,4 +1,4 @@
-# RAG 学习日志（站点源码）
+﻿# RAG 学习日志（站点源码）
 
 用 [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) 生成的学习日志站点。
 内容从私有学习仓库 `rag_study` 同步过来，同步时做脱敏（内部项目名换成代号）。
@@ -39,7 +39,7 @@ git init -b main
 git config user.email "你的GitHub数字ID+用户名@users.noreply.github.com"   # 别用公司邮箱
 git add -A
 git commit -m "init: MkDocs Material 学习日志站点"
-git remote add origin git@github.com:<用户名>/rag-study-blog.git
+git remote add origin git@github.com:<用户名>/rag-study.git
 $env:GIT_SSH='C:\Windows\System32\OpenSSH\ssh.exe'
 git push -u origin main
 ```

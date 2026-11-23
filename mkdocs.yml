@@ -1,11 +1,10 @@
-site_name: RAG 学习日志
+﻿site_name: RAG 学习日志
 site_description: 56 天从零手写一遍 RAG，每天一记
-site_author: liaoxin
+site_author: Void_Liao
 
-# 建好仓库后，把下面两行的 USERNAME 换成你的 GitHub 用户名
-site_url: https://USERNAME.github.io/rag-study-blog/
-repo_url: https://github.com/USERNAME/rag-study-blog
-repo_name: rag-study-blog
+site_url: https://Symbii.github.io/rag-study/
+repo_url: https://github.com/Symbii/rag-study
+repo_name: Symbii/rag-study
 
 theme:
   name: material

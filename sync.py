@@ -113,6 +113,22 @@ def title_of(text: str, fallback: str) -> str:
     return fallback
 
 
+def note_date(day_dir: Path) -> date | None:
+    """从当天笔记标题里取实际学习日日期（`# D02 · 2026-11-25 周三 · 第 1 周`）。
+
+    学习日不连续（2026-11-25 用户定），所以日期以笔记标题为准，不按日历推算。
+    """
+    for name in ("00-今日概览.md", "README.md"):
+        f = day_dir / name
+        if not f.exists():
+            continue
+        for line in f.read_text(encoding="utf-8").splitlines():
+            if line.startswith("# "):
+                m = re.search(r"(\d{4}-\d{2}-\d{2})", line)
+                return date.fromisoformat(m.group(1)) if m else None
+    return None
+
+
 def front_matter(text: str, title: str, day_date: date | None) -> str:
     if text.lstrip().startswith("---"):
         return text
@@ -145,7 +161,7 @@ def sync_days(slug: str) -> list[tuple[int, date, list[str]]]:
     days: list[tuple[int, date, list[str]]] = []
     for day_dir in sorted((ROOT / "notes").glob("D[0-9][0-9]")):
         n = int(day_dir.name[1:])
-        d = DAY_DATE_OVERRIDES.get(n) or (DAY1 + timedelta(days=n - 1))
+        d = note_date(day_dir) or DAY_DATE_OVERRIDES.get(n) or (DAY1 + timedelta(days=n - 1))
         out = out_root / day_dir.name
         out.mkdir(parents=True, exist_ok=True)
         pages = []

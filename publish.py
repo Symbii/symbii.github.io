@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import os
 import shutil
+import stat
 import subprocess
 import sys
 from pathlib import Path
@@ -31,6 +32,15 @@ def run(args: list[str], cwd: Path, env: dict[str, str] | None = None) -> None:
     subprocess.run(args, cwd=str(cwd), check=True, env=env)
 
 
+def force_rmtree(path: Path) -> None:
+    """Windows 上 .git/objects 是只读的，直接 rmtree 会 PermissionError；先去掉只读位再删。"""
+    def on_error(func, target, _exc):        # noqa: ANN001 - shutil 的回调签名
+        os.chmod(target, stat.S_IWRITE)
+        func(target)
+
+    shutil.rmtree(path, onexc=on_error)
+
+
 def main() -> None:
     py = sys.executable
 
@@ -41,7 +51,7 @@ def main() -> None:
 
     # 2) 拷到临时目录
     if TMP.exists():
-        shutil.rmtree(TMP)
+        force_rmtree(TMP)
     shutil.copytree(SITE, TMP)
     (TMP / ".nojekyll").write_text("", encoding="utf-8")
 
@@ -61,7 +71,7 @@ def main() -> None:
     run(["git", "remote", "add", "origin", remote], TMP, env)
     run(["git", "push", "--force", "origin", "gh-pages"], TMP, env)
 
-    shutil.rmtree(TMP)
+    force_rmtree(TMP)
     print(f"\n已发布：{remote} 的 gh-pages 分支")
 
 

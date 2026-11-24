@@ -95,6 +95,12 @@ def sanitize(text: str) -> str:
     # 笔记从 notes/D01/x.md 搬到 docs/rag-study/D01/x.md，层级没变：
     # 上跳两级仍然是「集合根」，所以 ../../papers/ -> ../papers/ 照旧成立
     text = text.replace("](../../", "](../")
+    # 站点只展示知识内容，不显示「[AI] / [本人]」来源标记（2026-11-25 用户要求）
+    text = text.replace("（[AI] 绘制，2026-11-23）", "（2026-11-23）")
+    text = text.replace("（[本人] 2026-11-23 14:47）", "（2026-11-23 14:47）")
+    text = re.sub(r"（\[(?:AI|本人)\]([^）]*)）", r"（\1）", text)
+    text = re.sub(r"\[(?:AI|本人)\]\s*", "", text)
+    text = re.sub(r"^> \*\*来源标记.*\n?", "", text, flags=re.M)
     return text
 
 

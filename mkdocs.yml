@@ -3,8 +3,6 @@ site_description: 学习笔记与工程记录
 site_author: Void_Liao
 
 site_url: https://symbii.github.io/
-repo_url: https://github.com/Symbii/symbii.github.io
-repo_name: Symbii/symbii.github.io
 edit_uri: ""
 
 theme:

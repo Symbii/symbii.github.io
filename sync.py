@@ -1,13 +1,23 @@
-"""把 rag_study 的学习笔记同步成 MkDocs 站点内容（脱敏 + 生成首页）。
+"""把 rag_study 的学习笔记同步成 MkDocs 站点内容（脱敏 + 生成首页 + 生成侧栏导航）。
 
 用法（在 D:\\code\\rag_study 下）：
     .\\.venv\\Scripts\\python.exe blog\\sync.py
 
-做四件事：
-1. notes\\D01..Dnn  -> blog\\docs\\D01..Dnn（md 加 front matter，png 原样复制）
-2. 根目录几篇可公开的 md -> blog\\docs\\
-3. papers\\*.md -> blog\\docs\\papers\\
-4. 按目录里的天数重新生成 blog\\docs\\index.md
+站点是「单站多集合」结构，一个集合一个目录：
+
+    docs/index.md              站点首页（集合总览，自动生成）
+    docs/about.md              关于本站（手写，放 blog/extra/about.md）
+    docs/rag-study/index.md    RAG 集合首页（进度表，自动生成）
+    docs/rag-study/D01..Dnn/   每日笔记（从 notes/ 同步）
+    docs/rag-study/papers/     论文译文
+    docs/rag-study/*.md        几篇可公开的长文档
+
+同步做五件事：
+1. notes\\D01..Dnn      -> docs\\<集合>\\D01..Dnn（md 加 front matter，png 原样复制）
+2. 根目录几篇可公开的 md -> docs\\<集合>\\
+3. papers\\*.md         -> docs\\<集合>\\papers\\
+4. 重生成 docs/index.md（站点首页）与 docs\\<集合>\\index.md（集合首页）
+5. 重写 mkdocs.yml 里 `# >>> NAV` 与 `# <<< NAV` 之间的导航
 
 脱敏只做项目名/公司名替换，不改技术内容。改映射就改 REDACT。
 """
@@ -22,9 +32,23 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent      # D:\code\rag_study\blog
 ROOT = HERE.parent                          # D:\code\rag_study
 DOCS = HERE / "docs"
+MKDOCS_YML = HERE / "mkdocs.yml"
 
 DAY1 = date(2026, 11, 23)      # D01 的日期
 TOTAL_DAYS = 56
+
+SITE_NAME = "Void_Liao 的博客"
+SITE_TAGLINE = "学习笔记与工程记录"
+
+# 集合：目录名 -> 显示标题 / 一句话介绍。
+# 以后加第二个集合（比如「论文精读」），在这里加一行 + 写对应的 sync 函数即可。
+COLLECTIONS = {
+    "rag-study": {
+        "title": "RAG 学习 56 天",
+        "desc": "56 天把 RAG 从零手写一遍：八环链路 → Embedding 与相似度 → HNSW → "
+                "BM25 → 重排 → 生成与引用 → 评测与误差分析。",
+    },
+}
 
 # 根目录下可以上站的文档（本项目对照文档有意排除）
 PUBLISH_ROOT = [
@@ -40,6 +64,8 @@ PUBLISH_ROOT = [
 REDACT = [
     ("projects/index_agent", "projects/解析服务A"),
     ("projects/rag_service", "projects/检索服务B"),
+    ("projects/解析服务A/", "项目A/"),
+    ("projects/检索服务B/", "项目B/"),
     ("index_agent", "解析服务A"),
     ("rag_service", "检索服务B"),
     ("selfrag", "检索服务B"),
@@ -57,13 +83,17 @@ DROP_FOREIGN = re.compile(
     r"\[([^\]]+)\]\([^)]*(?:AGENTS\.md|third_party/|notes/README\.md)[^)]*\)"
 )
 
+NAV_BEGIN = "# >>> NAV（由 blog/sync.py 生成，勿手改）"
+NAV_END = "# <<< NAV"
+
 
 def sanitize(text: str) -> str:
     for old, new in REDACT:
         text = text.replace(old, new)
     text = DROP_LINKS.sub(r"\1", text)
     text = DROP_FOREIGN.sub(r"\1", text)
-    # 笔记从 notes/D01/x.md 搬到 docs/D01/x.md，上跳一层即可到 docs 根
+    # 笔记从 notes/D01/x.md 搬到 docs/rag-study/D01/x.md，层级没变：
+    # 上跳两级仍然是「集合根」，所以 ../../papers/ -> ../papers/ 照旧成立
     text = text.replace("](../../", "](../")
     return text
 
@@ -89,6 +119,7 @@ def write_page(src: Path, dst: Path, day_date: date | None = None) -> None:
     raw = src.read_text(encoding="utf-8")
     body = sanitize(raw)
     title = title_of(body, src.stem)
+    dst.parent.mkdir(parents=True, exist_ok=True)
     dst.write_text(front_matter(body, title, day_date), encoding="utf-8")
 
 
@@ -97,12 +128,17 @@ def link_label(name: str) -> str:
     return re.sub(r"^\d+-", "", name[:-3])
 
 
-def sync_days() -> list[tuple[int, date, list[str]]]:
+def collection_dir(slug: str) -> Path:
+    return DOCS / slug
+
+
+def sync_days(slug: str) -> list[tuple[int, date, list[str]]]:
+    out_root = collection_dir(slug)
     days: list[tuple[int, date, list[str]]] = []
     for day_dir in sorted((ROOT / "notes").glob("D[0-9][0-9]")):
         n = int(day_dir.name[1:])
         d = DAY1 + timedelta(days=n - 1)
-        out = DOCS / day_dir.name
+        out = out_root / day_dir.name
         out.mkdir(parents=True, exist_ok=True)
         pages = []
         for f in sorted(day_dir.iterdir()):
@@ -118,18 +154,18 @@ def sync_days() -> list[tuple[int, date, list[str]]]:
     return days
 
 
-def sync_root_docs() -> list[str]:
+def sync_root_docs(slug: str) -> list[str]:
     done = []
     for name in PUBLISH_ROOT:
         src = ROOT / name
         if src.exists():
-            write_page(src, DOCS / name)
+            write_page(src, collection_dir(slug) / name)
             done.append(name)
     return done
 
 
-def sync_papers() -> list[str]:
-    out = DOCS / "papers"
+def sync_papers(slug: str) -> list[str]:
+    out = collection_dir(slug) / "papers"
     out.mkdir(parents=True, exist_ok=True)
     done = []
     for f in sorted((ROOT / "papers").glob("*.md")):
@@ -139,7 +175,7 @@ def sync_papers() -> list[str]:
 
 
 def sync_extra() -> list[str]:
-    """手写页面（关于、首页以外的固定页）放在 blog/extra，原样上站。"""
+    """站点级手写页面（关于本站等）放在 blog/extra，原样上站。"""
     done = []
     for f in sorted((HERE / "extra").glob("*.md")):
         shutil.copy2(f, DOCS / f.name)
@@ -147,7 +183,18 @@ def sync_extra() -> list[str]:
     return done
 
 
-def build_index(days: list[tuple[int, date, list[str]]], root_docs: list[str]) -> None:
+def write_legacy_pages(slug: str) -> None:
+    """旧站把「关于本站」放在 /rag-study/about/，搬成站点级 /about/ 后补一页保住老链接。"""
+    (collection_dir(slug) / "about.md").write_text(
+        "---\ntitle: 关于本站\n---\n\n# 关于本站\n\n这一页搬到了 [站点首页的关于页](../about.md)。\n",
+        encoding="utf-8",
+    )
+
+
+def build_collection_index(
+    slug: str, days: list[tuple[int, date, list[str]]], root_docs: list[str]
+) -> int:
+    meta = COLLECTIONS[slug]
     # 未来的天数目录（提前建的模板）不算进度、不进表格
     today = date.today()
     days = [x for x in days if x[1] <= today]
@@ -160,16 +207,14 @@ def build_index(days: list[tuple[int, date, list[str]]], root_docs: list[str]) -
     doc_links = " · ".join(f"[{Path(x).stem}]({x})" for x in root_docs)
 
     text = f"""---
-title: 首页
+title: {meta["title"]}
 hide:
-  - navigation
   - toc
 ---
 
-# RAG 学习日志
+# {meta["title"]}
 
-56 天，把 RAG 从零手写一遍。每天一记：概念怎么理解、源码在哪一行、
-实验得到什么数字、卡在哪里。
+{meta["desc"]}
 
 **进度**：{latest} / {TOTAL_DAYS} 天（最新 D{latest:02d}，{days[-1][1].isoformat() if days else "—"}）
 
@@ -184,32 +229,111 @@ hide:
 {doc_links if doc_links else "—"}
 
 - 论文精读：[RAG 原论文中英对照](papers/RAG-Lewis2020-中英对照.md)
+- 每天在学什么：[RAG 引擎学习地图](RAG引擎学习地图.md) · [56 天计划](RAG引擎每日学习计划.md)
+"""
+    (collection_dir(slug) / "index.md").write_text(text, encoding="utf-8")
+    return latest
 
-## 这个站在学什么
 
-从「RAG 到底在解决什么问题」开始，八环链路 → Embedding 与相似度 →
-向量索引（HNSW）→ 词法检索（BM25）→ 重排 → 生成与引用 → 评测与误差分析，
-最后落到一个能跑、能测、知道哪里会坏的小系统。
+def build_home(progress: dict[str, int]) -> None:
+    cards = []
+    for slug, meta in COLLECTIONS.items():
+        done = progress.get(slug, 0)
+        cards.append(
+            f"### [{meta['title']}]({slug}/index.md)\n\n"
+            f"{meta['desc']}\n\n"
+            f"- 进度：{done} / {TOTAL_DAYS} 天\n"
+            f"- [进入集合]({slug}/index.md)\n"
+        )
+    text = f"""---
+title: 首页
+hide:
+  - toc
+---
 
-所有笔记都是当天现写的，有大量「这里我想错了」的记录——那部分比结论有用。
+# {SITE_NAME}
+
+{SITE_TAGLINE}。每个主题一个集合，左边栏按集合分组。
+
+## 集合
+
+{chr(10).join(cards)}
+## 关于
+
+- [关于本站](about.md)：这里写什么、不写什么
+- 论文译文、实验数字、源码锚点都在各集合里
 """
     (DOCS / "index.md").write_text(text, encoding="utf-8")
 
 
+def yq(value: str) -> str:
+    """nav 里的值：含冒号空格、井号或首字符特殊时加引号。"""
+    if re.search(r":\s|#|^[-?*&!|>@`\"'%{}\[\],]", value):
+        return '"' + value.replace('"', '\\"') + '"'
+    return value
+
+
+def build_nav(
+    per_collection: dict[str, tuple[list[tuple[int, date, list[str]]], list[str], list[str]]]
+) -> None:
+    lines = ["nav:", "  - 首页: index.md", "  - 集合:"]
+    for slug, meta in COLLECTIONS.items():
+        days, root_docs, papers = per_collection.get(slug, ([], [], []))
+        lines.append(f"      - {yq(meta['title'])}:")
+        lines.append(f"          - 概述: {slug}/index.md")
+        for n, d, pages in days:
+            lines.append(f"          - D{n:02d} · {d.isoformat()}:")
+            for p in pages:
+                lines.append(f"              - {yq(link_label(p))}: {slug}/D{n:02d}/{p}")
+        if root_docs:
+            lines.append("          - 长文档:")
+            for name in root_docs:
+                lines.append(f"              - {yq(Path(name).stem)}: {slug}/{name}")
+        if papers:
+            lines.append("          - 论文:")
+            for name in papers:
+                lines.append(f"              - {yq(Path(name).stem)}: {slug}/papers/{name}")
+    lines.append("  - 关于: about.md")
+    nav = "\n".join(lines)
+
+    text = MKDOCS_YML.read_text(encoding="utf-8")
+    new, count = re.subn(
+        re.escape(NAV_BEGIN) + r".*?" + re.escape(NAV_END),
+        NAV_BEGIN + "\n" + nav + "\n" + NAV_END,
+        text,
+        flags=re.S,
+    )
+    if count != 1:
+        raise SystemExit(f"mkdocs.yml 里没找到 NAV 标记（{NAV_BEGIN} / {NAV_END}）")
+    MKDOCS_YML.write_text(new, encoding="utf-8")
+
+
 def main() -> None:
-    # 清掉上一轮的每日目录，避免删掉文件后站点残留
-    for d in DOCS.glob("D[0-9][0-9]"):
-        shutil.rmtree(d)
-    days = sync_days()
-    root_docs = sync_root_docs()
-    papers = sync_papers()
+    for slug in COLLECTIONS:
+        # 清掉上一轮的每日目录，避免删掉文件后站点残留
+        for d in collection_dir(slug).glob("D[0-9][0-9]"):
+            shutil.rmtree(d)
+        collection_dir(slug).mkdir(parents=True, exist_ok=True)
+
     extras = sync_extra()
-    build_index(days, root_docs)
-    print(f"days   : {', '.join('D%02d(%d files)' % (n, len(p)) for n, _, p in days)}")
-    print(f"root   : {', '.join(root_docs)}")
-    print(f"papers : {', '.join(papers)}")
+    progress: dict[str, int] = {}
+    per_collection = {}
+    for slug in COLLECTIONS:
+        write_legacy_pages(slug)
+        days = sync_days(slug)
+        root_docs = sync_root_docs(slug)
+        papers = sync_papers(slug)
+        progress[slug] = build_collection_index(slug, days, root_docs)
+        per_collection[slug] = (days, root_docs, papers)
+        print(f"{slug} days    : {', '.join('D%02d(%d files)' % (n, len(p)) for n, _, p in days)}")
+        print(f"{slug} root    : {', '.join(root_docs)}")
+        print(f"{slug} papers  : {', '.join(papers)}")
+
+    build_home(progress)
+    build_nav(per_collection)
     print(f"extra  : {', '.join(extras)}")
-    print(f"index  : {DOCS / 'index.md'}")
+    print(f"home   : {DOCS / 'index.md'}")
+    print(f"nav    : {MKDOCS_YML}")
 
 
 if __name__ == "__main__":

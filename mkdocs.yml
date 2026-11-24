@@ -1,5 +1,5 @@
 site_name: Void_Liao 的博客
-site_description: 学习笔记与工程记录，按集合组织
+site_description: 学习笔记与工程记录
 site_author: Void_Liao
 
 site_url: https://symbii.github.io/
@@ -35,6 +35,9 @@ theme:
         icon: material/weather-sunny
         name: 切到浅色
 
+extra_css:
+  - stylesheets/extra.css
+
 markdown_extensions:
   - admonition
   - attr_list
@@ -65,29 +68,28 @@ plugins:
 # >>> NAV（由 blog/sync.py 生成，勿手改）
 nav:
   - 首页: index.md
-  - 集合:
-      - RAG 学习 56 天:
-          - 概述: rag-study/index.md
-          - D01 · 2026-11-23:
-              - 今日概览: rag-study/D01/00-今日概览.md
-              - 链路图: rag-study/D01/01-链路图.md
-              - 论文精读: rag-study/D01/02-论文精读.md
-              - 源码对照: rag-study/D01/03-源码对照.md
-              - 复述与卡点: rag-study/D01/04-复述与卡点.md
-              - 术语澄清-稠密向量索引: rag-study/D01/05-术语澄清-稠密向量索引.md
-              - 打卡总结: rag-study/D01/06-打卡总结.md
-              - 八环默写-本人版: rag-study/D01/07-八环默写-本人版.md
-              - 链路图-AI绘制: rag-study/D01/08-链路图-AI绘制.md
-          - D02 · 2026-11-24:
-              - 今日概览: rag-study/D02/00-今日概览.md
-          - 长文档:
-              - RAG引擎学习地图: rag-study/RAG引擎学习地图.md
-              - RAG引擎每日学习计划: rag-study/RAG引擎每日学习计划.md
-              - RAGFlow源码学习地图: rag-study/RAGFlow源码学习地图.md
-              - learning-log: rag-study/learning-log.md
-              - experiments: rag-study/experiments.md
-              - glossary: rag-study/glossary.md
-          - 论文:
-              - RAG-Lewis2020-中英对照: rag-study/papers/RAG-Lewis2020-中英对照.md
+  - RAG 学习 56 天:
+      - 概述: rag-study/index.md
+      - D01 · 2026-11-23:
+          - 今日概览: rag-study/D01/00-今日概览.md
+          - 链路图: rag-study/D01/01-链路图.md
+          - 论文精读: rag-study/D01/02-论文精读.md
+          - 源码对照: rag-study/D01/03-源码对照.md
+          - 复述与卡点: rag-study/D01/04-复述与卡点.md
+          - 术语澄清-稠密向量索引: rag-study/D01/05-术语澄清-稠密向量索引.md
+          - 打卡总结: rag-study/D01/06-打卡总结.md
+          - 八环默写-本人版: rag-study/D01/07-八环默写-本人版.md
+          - 链路图-AI绘制: rag-study/D01/08-链路图-AI绘制.md
+      - D02 · 2026-11-24:
+          - 今日概览: rag-study/D02/00-今日概览.md
+      - 长文档:
+          - RAG引擎学习地图: rag-study/RAG引擎学习地图.md
+          - RAG引擎每日学习计划: rag-study/RAG引擎每日学习计划.md
+          - RAGFlow源码学习地图: rag-study/RAGFlow源码学习地图.md
+          - learning-log: rag-study/learning-log.md
+          - experiments: rag-study/experiments.md
+          - glossary: rag-study/glossary.md
+      - 论文:
+          - RAG-Lewis2020-中英对照: rag-study/papers/RAG-Lewis2020-中英对照.md
   - 关于: about.md
 # <<< NAV

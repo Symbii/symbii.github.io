@@ -175,11 +175,19 @@ def sync_papers(slug: str) -> list[str]:
 
 
 def sync_extra() -> list[str]:
-    """站点级手写页面（关于本站等）放在 blog/extra，原样上站。"""
+    """站点级手写资源（blog/extra）：*.md 原样上站，stylesheets/ 跟着复制。"""
     done = []
     for f in sorted((HERE / "extra").glob("*.md")):
         shutil.copy2(f, DOCS / f.name)
         done.append(f.name)
+
+    css_src = HERE / "extra" / "stylesheets"
+    if css_src.is_dir():
+        css_out = DOCS / "stylesheets"
+        css_out.mkdir(parents=True, exist_ok=True)
+        for f in sorted(css_src.glob("*.css")):
+            shutil.copy2(f, css_out / f.name)
+            done.append(f"stylesheets/{f.name}")
     return done
 
 
@@ -240,10 +248,10 @@ def build_home(progress: dict[str, int]) -> None:
     for slug, meta in COLLECTIONS.items():
         done = progress.get(slug, 0)
         cards.append(
-            f"### [{meta['title']}]({slug}/index.md)\n\n"
-            f"{meta['desc']}\n\n"
-            f"- 进度：{done} / {TOTAL_DAYS} 天\n"
-            f"- [进入集合]({slug}/index.md)\n"
+            f"-   **{meta['title']}**\n\n"
+            f"    ---\n\n"
+            f"    {meta['desc']}\n\n"
+            f"    [进入 →]({slug}/index.md) · 进度 {done} / {TOTAL_DAYS} 天\n\n"
         )
     text = f"""---
 title: 首页
@@ -251,17 +259,19 @@ hide:
   - toc
 ---
 
+<div class="hero" markdown>
+<div class="bubbles">
+<span></span><span></span><span></span><span></span><span></span>
+</div>
+
 # {SITE_NAME}
 
-{SITE_TAGLINE}。每个主题一个集合，左边栏按集合分组。
+</div>
 
-## 集合
+<div class="grid cards" markdown>
+{chr(10).join(cards)}</div>
 
-{chr(10).join(cards)}
-## 关于
-
-- [关于本站](about.md)：这里写什么、不写什么
-- 论文译文、实验数字、源码锚点都在各集合里
+[关于本站](about.md)
 """
     (DOCS / "index.md").write_text(text, encoding="utf-8")
 
@@ -276,23 +286,23 @@ def yq(value: str) -> str:
 def build_nav(
     per_collection: dict[str, tuple[list[tuple[int, date, list[str]]], list[str], list[str]]]
 ) -> None:
-    lines = ["nav:", "  - 首页: index.md", "  - 集合:"]
+    lines = ["nav:", "  - 首页: index.md"]
     for slug, meta in COLLECTIONS.items():
         days, root_docs, papers = per_collection.get(slug, ([], [], []))
-        lines.append(f"      - {yq(meta['title'])}:")
-        lines.append(f"          - 概述: {slug}/index.md")
+        lines.append(f"  - {yq(meta['title'])}:")
+        lines.append(f"      - 概述: {slug}/index.md")
         for n, d, pages in days:
-            lines.append(f"          - D{n:02d} · {d.isoformat()}:")
+            lines.append(f"      - D{n:02d} · {d.isoformat()}:")
             for p in pages:
-                lines.append(f"              - {yq(link_label(p))}: {slug}/D{n:02d}/{p}")
+                lines.append(f"          - {yq(link_label(p))}: {slug}/D{n:02d}/{p}")
         if root_docs:
-            lines.append("          - 长文档:")
+            lines.append("      - 长文档:")
             for name in root_docs:
-                lines.append(f"              - {yq(Path(name).stem)}: {slug}/{name}")
+                lines.append(f"          - {yq(Path(name).stem)}: {slug}/{name}")
         if papers:
-            lines.append("          - 论文:")
+            lines.append("      - 论文:")
             for name in papers:
-                lines.append(f"              - {yq(Path(name).stem)}: {slug}/papers/{name}")
+                lines.append(f"          - {yq(Path(name).stem)}: {slug}/papers/{name}")
     lines.append("  - 关于: about.md")
     nav = "\n".join(lines)
 

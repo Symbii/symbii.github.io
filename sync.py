@@ -36,6 +36,8 @@ MKDOCS_YML = HERE / "mkdocs.yml"
 
 DAY1 = date(2026, 11, 23)      # D01 的日期
 TOTAL_DAYS = 56
+# 实际执行日期与计划日不一致时在这里覆盖（2026-11-25 用户定：D02 改 11-25）
+DAY_DATE_OVERRIDES = {2: date(2026, 11, 25)}
 
 SITE_NAME = "Void_Liao 的博客"
 SITE_TAGLINE = "学习笔记与工程记录"
@@ -143,7 +145,7 @@ def sync_days(slug: str) -> list[tuple[int, date, list[str]]]:
     days: list[tuple[int, date, list[str]]] = []
     for day_dir in sorted((ROOT / "notes").glob("D[0-9][0-9]")):
         n = int(day_dir.name[1:])
-        d = DAY1 + timedelta(days=n - 1)
+        d = DAY_DATE_OVERRIDES.get(n) or (DAY1 + timedelta(days=n - 1))
         out = out_root / day_dir.name
         out.mkdir(parents=True, exist_ok=True)
         pages = []

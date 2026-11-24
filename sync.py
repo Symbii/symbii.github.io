@@ -212,8 +212,6 @@ def build_collection_index(
         links = " · ".join(f"[{link_label(p)}](D{n:02d}/{p})" for p in pages)
         rows.append(f"| D{n:02d} | {d.isoformat()} | {links} |")
 
-    doc_links = " · ".join(f"[{Path(x).stem}]({x})" for x in root_docs)
-
     text = f"""---
 title: {meta["title"]}
 hide:
@@ -222,8 +220,6 @@ hide:
 
 # {meta["title"]}
 
-{meta["desc"]}
-
 **进度**：{latest} / {TOTAL_DAYS} 天（最新 D{latest:02d}，{days[-1][1].isoformat() if days else "—"}）
 
 ## 每日笔记
@@ -231,13 +227,6 @@ hide:
 | 天 | 日期 | 当天写了什么 |
 |---|---|---|
 {chr(10).join(rows) if rows else "| — | — | — |"}
-
-## 常逛的几篇
-
-{doc_links if doc_links else "—"}
-
-- 论文精读：[RAG 原论文中英对照](papers/RAG-Lewis2020-中英对照.md)
-- 每天在学什么：[RAG 引擎学习地图](RAG引擎学习地图.md) · [56 天计划](RAG引擎每日学习计划.md)
 """
     (collection_dir(slug) / "index.md").write_text(text, encoding="utf-8")
     return latest
@@ -250,7 +239,6 @@ def build_home(progress: dict[str, int]) -> None:
         cards.append(
             f"-   **{meta['title']}**\n\n"
             f"    ---\n\n"
-            f"    {meta['desc']}\n\n"
             f"    [进入 →]({slug}/index.md) · 进度 {done} / {TOTAL_DAYS} 天\n\n"
         )
     text = f"""---
@@ -270,8 +258,6 @@ hide:
 
 <div class="grid cards" markdown>
 {chr(10).join(cards)}</div>
-
-[关于本站](about.md)
 """
     (DOCS / "index.md").write_text(text, encoding="utf-8")
 
@@ -296,7 +282,7 @@ def build_nav(
             for p in pages:
                 lines.append(f"          - {yq(link_label(p))}: {slug}/D{n:02d}/{p}")
         if root_docs:
-            lines.append("      - 长文档:")
+            lines.append("      - 参考:")
             for name in root_docs:
                 lines.append(f"          - {yq(Path(name).stem)}: {slug}/{name}")
         if papers:

@@ -173,6 +173,10 @@ def sync_days(slug: str) -> list[tuple[int, date, list[str]]]:
             elif f.suffix == ".md":
                 write_page(f, out / f.name, d)
                 pages.append(f.name)
+        # 笔记改名/删除后，docs 里会留下旧页；旧页不清掉就会一直发布过期内容
+        for stale in out.glob("*.md"):
+            if stale.name not in pages:
+                stale.unlink()
         if pages:
             days.append((n, d, pages))
     return days
@@ -232,9 +236,9 @@ def build_collection_index(
     days = [x for x in days if x[1] <= today]
     latest = days[-1][0] if days else 0
     rows = []
-    for n, d, pages in days:
+    for n, _d, pages in days:
         links = " · ".join(f"[{link_label(p)}](D{n:02d}/{p})" for p in pages)
-        rows.append(f"| D{n:02d} | {d.isoformat()} | {links} |")
+        rows.append(f"| D{n:02d} | {links} |")
 
     text = f"""---
 title: {meta["title"]}
@@ -244,13 +248,13 @@ hide:
 
 # {meta["title"]}
 
-**进度**：{latest} / {TOTAL_DAYS} 天（最新 D{latest:02d}，{days[-1][1].isoformat() if days else "—"}）
+**进度**：{latest} / {TOTAL_DAYS} 天（最新 D{latest:02d}）
 
 ## 每日笔记
 
-| 天 | 日期 | 当天写了什么 |
-|---|---|---|
-{chr(10).join(rows) if rows else "| — | — | — |"}
+| 天 | 当天写了什么 |
+|---|---|
+{chr(10).join(rows) if rows else "| — | — |"}
 """
     (collection_dir(slug) / "index.md").write_text(text, encoding="utf-8")
     return latest

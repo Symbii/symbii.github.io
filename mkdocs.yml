@@ -68,6 +68,8 @@ nav:
   - 首页: index.md
   - RAG 学习 56 天:
       - 概述: rag-study/index.md
+      - 复习:
+          - 复习总结: rag-study/D00/00-复习总结.md
       - D01 · 2026-11-23:
           - 今日概览: rag-study/D01/00-今日概览.md
           - 链路图: rag-study/D01/01-链路图.md

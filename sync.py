@@ -152,16 +152,25 @@ def link_label(name: str) -> str:
     return re.sub(r"^\d+-", "", name[:-3])
 
 
+def day_label(n: int) -> str:
+    """D00 是复习总结，不占学习日编号。"""
+    return "复习" if n == 0 else f"D{n:02d}"
+
+
 def collection_dir(slug: str) -> Path:
     return DOCS / slug
 
 
-def sync_days(slug: str) -> list[tuple[int, date, list[str]]]:
+def sync_days(slug: str) -> list[tuple[int, date | None, list[str]]]:
     out_root = collection_dir(slug)
-    days: list[tuple[int, date, list[str]]] = []
+    days: list[tuple[int, date | None, list[str]]] = []
     for day_dir in sorted((ROOT / "notes").glob("D[0-9][0-9]")):
         n = int(day_dir.name[1:])
-        d = note_date(day_dir) or DAY_DATE_OVERRIDES.get(n) or (DAY1 + timedelta(days=n - 1))
+        if n == 0:
+            # D00 是跨天累积的复习总结，没有学习日日期，也不算进度
+            d = None
+        else:
+            d = note_date(day_dir) or DAY_DATE_OVERRIDES.get(n) or (DAY1 + timedelta(days=n - 1))
         out = out_root / day_dir.name
         out.mkdir(parents=True, exist_ok=True)
         pages = []
@@ -228,17 +237,18 @@ def write_legacy_pages(slug: str) -> None:
 
 
 def build_collection_index(
-    slug: str, days: list[tuple[int, date, list[str]]], root_docs: list[str]
+    slug: str, days: list[tuple[int, date | None, list[str]]], root_docs: list[str]
 ) -> int:
     meta = COLLECTIONS[slug]
-    # 未来的天数目录（提前建的模板）不算进度、不进表格
+    # 未来的天数目录（提前建的模板）不算进度、不进表格；D00 复习总结永远进表格但不计进度
     today = date.today()
-    days = [x for x in days if x[1] <= today]
-    latest = days[-1][0] if days else 0
+    days = [x for x in days if x[0] == 0 or (x[1] is not None and x[1] <= today)]
+    learning = [x for x in days if x[0] >= 1]
+    latest = learning[-1][0] if learning else 0
     rows = []
     for n, _d, pages in days:
         links = " · ".join(f"[{link_label(p)}](D{n:02d}/{p})" for p in pages)
-        rows.append(f"| D{n:02d} | {links} |")
+        rows.append(f"| {day_label(n)} | {links} |")
 
     text = f"""---
 title: {meta["title"]}
@@ -298,7 +308,7 @@ def yq(value: str) -> str:
 
 
 def build_nav(
-    per_collection: dict[str, tuple[list[tuple[int, date, list[str]]], list[str], list[str]]]
+    per_collection: dict[str, tuple[list[tuple[int, date | None, list[str]]], list[str], list[str]]]
 ) -> None:
     lines = ["nav:", "  - 首页: index.md"]
     for slug, meta in COLLECTIONS.items():
@@ -306,7 +316,8 @@ def build_nav(
         lines.append(f"  - {yq(meta['title'])}:")
         lines.append(f"      - 概述: {slug}/index.md")
         for n, d, pages in days:
-            lines.append(f"      - D{n:02d} · {d.isoformat()}:")
+            head = day_label(n) if d is None else f"{day_label(n)} · {d.isoformat()}"
+            lines.append(f"      - {head}:")
             for p in pages:
                 lines.append(f"          - {yq(link_label(p))}: {slug}/D{n:02d}/{p}")
         if root_docs:
@@ -349,7 +360,7 @@ def main() -> None:
         papers = sync_papers(slug)
         progress[slug] = build_collection_index(slug, days, root_docs)
         per_collection[slug] = (days, root_docs, papers)
-        print(f"{slug} days    : {', '.join('D%02d(%d files)' % (n, len(p)) for n, _, p in days)}")
+        print(f"{slug} days    : {', '.join('%s(%d files)' % (day_label(n), len(p)) for n, _, p in days)}")
         print(f"{slug} root    : {', '.join(root_docs)}")
         print(f"{slug} papers  : {', '.join(papers)}")
 

@@ -5,13 +5,13 @@ title: "RAGFlow 源码学习地图（配 56 天计划）"
 
 > 配读文档：[RAG 引擎学习地图](RAG引擎学习地图.md) · [RAG 引擎每日学习计划](RAG引擎每日学习计划.md)
 > 源码位置：`third_party/ragflow-0.27.3`（已 gitignore，不进版本库）
-> 版本：**v0.27.3**，RAGFlow 最后一条 Python 主线
+> 版本：v0.27.3，RAGFlow 最后一条 Python 主线
 
 ## 0. 为什么读这个版本
 
-RAGFlow 上游主线已到 **v1.0.0，整仓用 Go 重写**（`internal/deepdoc`、`internal/engine`、`cmd/`）。理念没变，但代码从"一个 Python 文件里的函数"变成"跨包的接口实现"，对第一次读 RAG 源码的人来说噪声太大。
+RAGFlow 上游主线已到 v1.0.0，整仓用 Go 重写（`internal/deepdoc`、`internal/engine`、`cmd/`）。理念没变，但代码从一个 Python 文件里的函数变成了跨包的接口实现，对第一次读 RAG 源码的人来说噪声太大。
 
-v0.27.3 仍是完整 Python 实现，`rag/` + `deepdoc/` 两层结构，一个函数 30 行内能读完，适合拿来对照自己手写的 naive RAG。等你把 8 周跑完、想看成产级实现时，再切到 1.0 的 Go 版对照不迟。
+v0.27.3 还是完整的 Python 实现，`rag/` 加 `deepdoc/` 两层结构，一个函数 30 行内能读完，适合拿来对照自己手写的 naive RAG。等 8 周跑完、想看成产级实现时，再切到 1.0 的 Go 版对照不迟。
 
 拉取方式（已执行，需要重拉时用）：
 
@@ -41,24 +41,21 @@ RAGFlow 只有两条链路，其余都是外围。
            → 生成 + 引用 generator.py:citation_prompt() / search.py:insert_citations()
 ```
 
-对应你 D01 要画的 8 环链路图：**解析（deepdoc）→ 切分（naive.chunk）→ 编码（embedding_model）→ 索引（*_conn）→ 查询理解（query.question）→ 召回（search.search）→ 重排（search.retrieval）→ 组装+生成（generator）**。RAGFlow 把"解析"看得极重——`deepdoc/` 占 65 个文件，这是它与论文版 RAG 最大的差别。
+对应 D01 要画的 8 环链路图：解析（deepdoc）、切分（naive.chunk）、编码（embedding_model）、索引（*_conn）、查询理解（query.question）、召回（search.search）、重排（search.retrieval）、组装加生成（generator）。RAGFlow 把解析看得极重，`deepdoc/` 占了 65 个文件，这是它与论文版 RAG 最大的差别。
 
 ## 2. 读源码的三层法
 
-**第一层：调用链（30 分钟，只读签名）**
-在整仓 grep 你要找的概念词，把"谁调用谁"画出来，**不读函数体**。
+第一层看调用链，30 分钟，只读签名。在整仓 grep 概念词，把谁调用谁画出来，不读函数体。
 
 ```powershell
 Select-String -Path third_party/ragflow-0.27.3/rag/*/*.py -Pattern 'def retrieval|def chunk|def search'
 ```
 
-**第二层：单函数（每天 15–25 分钟）**
-只读当天锚点的那一个函数，读到能回答"输入什么、输出什么、中间改了哪三个字段"。其它一律跳过。
+第二层读单函数，每天 15–25 分钟。只读当天锚点那一个函数，读到能回答输入什么、输出什么、中间改了哪三个字段，其它一律跳过。
 
-**第三层：反例（每周一次）**
-读完问一句"它在什么情况下错"。RAGFlow 的注释和 `try/except` 里常藏着工程妥协（比如 `_is_garbled_text`、`min_match`），那才是真实世界的信号。
+第三层找反例，每周一次。读完问一句它在什么情况下会错。RAGFlow 的注释和 `try/except` 里常藏着工程妥协，比如 `_is_garbled_text`、`min_match`，那才是真实世界的信号。
 
-**不要做的事**：不要从 `api/` 开始读（全是参数校验）；不要通读 `rag/app/naive.py`（66 KB）；不要读 `rag/utils/*_conn.py` 全量（十几个向量库适配器，选一个读即可）。
+不要做的事：不要从 `api/` 开始读，全是参数校验；不要通读 `rag/app/naive.py`（66 KB）；不要读 `rag/utils/*_conn.py` 全量，十几个向量库适配器，选一个读即可。
 
 ## 3. 每周对应源码
 
@@ -87,7 +84,7 @@ Select-String -Path third_party/ragflow-0.27.3/rag/*/*.py -Pattern 'def retrieva
 | D04 | BM25 | `rag/nlp/query.py:42 question`；`rag/nlp/term_weight.py`；`rag/nlp/__init__.py:423 tokenize` | 中文 query 怎么变成 term 权重，专有名词怎么保 |
 | D05 | 手写 naive RAG | `rag/app/naive.py:1123 chunk` | 切分的输入输出字段（`content_with_weight`、`content_ltks`、`docnm_kwd`…），对照你的 100 行 |
 | D06 | 误差分析 | `rag/nlp/search.py:431 insert_citations`；`:242 get_filters` | 引用对不上会怎样；过滤条件写错会静默返回空 |
-| D07 | 周复盘 | `rag/flow/pipeline.py`；`rag/svr/task_executor_refactor/` | 工程化如何把"一个函数"拆成可重试的阶段 |
+| D07 | 周复盘 | `rag/flow/pipeline.py`；`rag/svr/task_executor_refactor/` | 工程化如何把一个函数拆成可重试的阶段 |
 
 ### 第 2 周
 
@@ -97,7 +94,7 @@ Select-String -Path third_party/ragflow-0.27.3/rag/*/*.py -Pattern 'def retrieva
 | D09 | 双栏与阅读顺序 | `pdf_parser.py:905 _assign_column`、`:989 _text_merge`、`:1108 _final_reading_order_merge` | 栏检测、纵向合并、最终排序三段逻辑 |
 | D10 | 表格抽取 | `pdf_parser.py:1307 _extract_table_figure`；`deepdoc/vision/table_structure_recognizer.py`；`rag/app/table.py` | 有线/无线表怎么分流，表格怎么转 Markdown |
 | D11 | 扫描件 OCR | `pdf_parser.py:789 __ocr`；`deepdoc/vision/ocr.py`；`layout_recognizer.py` | det/rec/cls 三阶段的封装，版面识别输出什么 |
-| D12 | 其它格式 | `deepdoc/parser/docx_parser.py`、`excel_parser.py`、`html_parser.py`、`markdown_parser.py` | 每种格式的"结构信号"从哪来 |
+| D12 | 其它格式 | `deepdoc/parser/docx_parser.py`、`excel_parser.py`、`html_parser.py`、`markdown_parser.py` | 每种格式的结构信号从哪来 |
 | D13 | 解析 pipeline 整合 | `rag/app/naive.py:171 by_deepdoc`、`:1123 chunk`；`deepdoc/parser/__init__.py` | 格式分派表 + 失败回退（`_is_garbled_text`） |
 | D14 | 建 30 题评测集 | `rag/benchmark.py` | 它自带的评测脚本长什么样，指标怎么算 |
 
@@ -106,7 +103,7 @@ Select-String -Path third_party/ragflow-0.27.3/rag/*/*.py -Pattern 'def retrieva
 | Day | 主题 | 锚点 | 看什么 |
 |---|---|---|---|
 | D15 | 切分策略全景 | `rag/app/naive.py:1123 chunk` 里的 `parser_config`；`rag/nlp/delim.py` | `chunk_token_num`/`delimiter` 怎么传下去 |
-| D16 | 语义切分 | `rag/nlp/__init__.py:371 bullets_category`、`:1241 title_frequency`、`:1271 tree_merge` | 它用"标题频率+符号"猜层级，而非真语义 |
+| D16 | 语义切分 | `rag/nlp/__init__.py:371 bullets_category`、`:1241 title_frequency`、`:1271 tree_merge` | 它用标题频率加符号来猜层级，而不是真语义 |
 | D17 | 结构化与父子块 | `rag/nlp/search.py:1101 retrieval_by_children` | 命中子块后怎么拉父块，代价是什么 |
 | D18 | 元数据与过滤 | `rag/nlp/search.py:242 get_filters`；`rag/prompts/meta_filter.md` | 过滤条件的 DSL 从自然语言怎么生成 |
 | D19 | 向量库选型 | `rag/utils/es_conn.py` vs `infinity_conn.py` vs `ob_conn.py`；`rag/settings.py` | 同一 `search()` 接口在不同后端的差异 |
@@ -141,13 +138,13 @@ Select-String -Path third_party/ragflow-0.27.3/rag/*/*.py -Pattern 'def retrieva
 
 | Day | 主题 | 锚点 | 看什么 |
 |---|---|---|---|
-| D36 | Grounded Generation | `rag/prompts/generator.py`（system prompt 拼装）、`rag/prompts/citation_prompt.md` | 怎么约束"只能用给定材料" |
-| D37 | 拒答与不确定 | `generator.py:575 _is_llm_error_answer`；`rag/prompts/sufficiency_check.md` | 它靠什么判断"材料不够" |
+| D36 | Grounded Generation | `rag/prompts/generator.py`（system prompt 拼装）、`rag/prompts/citation_prompt.md` | 怎么约束只能用给定材料 |
+| D37 | 拒答与不确定 | `generator.py:575 _is_llm_error_answer`；`rag/prompts/sufficiency_check.md` | 它靠什么判断材料不够 |
 | D38 | 多轮对话 | `generator.py:188 memory_prompt`、`:427 form_history` | 历史怎么截断、怎么与检索结果共存 |
 | D39 | 评测指标与 RAGAS | `rag/benchmark.py`；`rag/prompts/structured_output_prompt.md` | 结构化输出如何让 judge 可解析 |
 | D40 | 100 题 + judge 校准 | `rag/benchmark.py` | 批量评测的执行方式 |
 | D41 | CI 回归与 Trace | `api/apps/langfuse_api.py`；`rag/svr/task_executor.py:211 set_progress` | 可观测性埋在哪 |
-| D42 | 周复盘 | 归因报告模版 + 你自己的表 | — |
+| D42 | 周复盘 | 归因报告模版 + 你自己的表 | 无 |
 
 ### 第 7 周
 
@@ -165,9 +162,9 @@ Select-String -Path third_party/ragflow-0.27.3/rag/*/*.py -Pattern 'def retrieva
 
 | Day | 主题 | 锚点 | 看什么 |
 |---|---|---|---|
-| D50 | Agentic RAG | `rag/advanced_rag/agentic_rag.py`、`agentic_rag_graph.py` | 检索被改成"可多次调用"后的控制流 |
+| D50 | Agentic RAG | `rag/advanced_rag/agentic_rag.py`、`agentic_rag_graph.py` | 检索被改成可多次调用后的控制流 |
 | D51 | 检索原语工具化 | `agent/tools/retrieval.py` | 检索怎么变成 agent 的一个 tool |
-| D52 | GraphRAG 原理 | `rag/graphrag/general/`（`graph_extractor.py`、`leiden.py`、`community_reports_extractor.py`） | 实体抽取→社区发现→社区摘要三步 |
+| D52 | GraphRAG 原理 | `rag/graphrag/general/`（`graph_extractor.py`、`leiden.py`、`community_reports_extractor.py`） | 实体抽取、社区发现、社区摘要三步 |
 | D53 | GraphRAG 边界 | `rag/graphrag/light/graph_extractor.py`、`rag/graphrag/search.py:35 KGSearch` | 轻量版砍掉了什么，为什么 |
 | D54 | 长上下文 vs RAG | `rag/prompts/generator.py:69 message_fit_in` | 截断策略暴露的取舍 |
 | D55 | 进阶 demo + 基线 | `rag/benchmark.py` | 用它的评测口径对齐自己的基线 |
@@ -177,25 +174,25 @@ Select-String -Path third_party/ragflow-0.27.3/rag/*/*.py -Pattern 'def retrieva
 
 按顺序读，每个都短：
 
-1. **`rag/app/naive.py:1123 chunk()`** — 一个函数吃进文件、吐出带元数据的块。所有切分讨论的落点。
-2. **`rag/nlp/search.py:717 retrieval()`** — 召回→融合→重排的唯一入口，读完就懂"检索"在工程上是什么。
-3. **`rag/prompts/generator.py:168 kb_prompt()`** — 检索结果变成 prompt 的那 20 行，`max_tokens` 裁剪就发生在这里。
-4. **`rag/svr/task_executor.py:1449 do_handle_task()`** — 写入链路的总调度，看它如何记录进度、失败重试。
-5. **`deepdoc/parser/pdf_parser.py:1108 _final_reading_order_merge()`** — 阅读顺序的启发式规则，比任何博客都具体。
+1. `rag/app/naive.py:1123 chunk()`，一个函数吃进文件、吐出带元数据的块，所有切分讨论的落点。
+2. `rag/nlp/search.py:717 retrieval()`，召回、融合、重排的唯一入口，读完就懂检索在工程上是什么。
+3. `rag/prompts/generator.py:168 kb_prompt()`，检索结果变成 prompt 的那 20 行，`max_tokens` 裁剪就发生在这里。
+4. `rag/svr/task_executor.py:1449 do_handle_task()`，写入链路的总调度，看它如何记录进度、失败重试。
+5. `deepdoc/parser/pdf_parser.py:1108 _final_reading_order_merge()`，阅读顺序的启发式规则，比任何博客都具体。
 
 ## 6. 一条规则：源码只用来验证，不用来学概念
 
-先读论文/文档建立概念，**再用源码回答"它到底怎么实现的"**，不要反过来。
+先读论文和文档建立概念，再用源码回答它到底怎么实现的，不要反过来。
 
-- 学 HNSW → 先跑你自己的 FAISS 实验，再看 `init_kb` 里参数怎么填；
-- 学 BM25 → 先手写一遍，再看 `term_weight.py` 与 ES 查询；
-- 学重排 → 先算一次 cross-encoder 分，再看 `rerank_by_model` 怎么合成。
+- 学 HNSW，先跑自己的 FAISS 实验，再看 `init_kb` 里参数怎么填；
+- 学 BM25，先手写一遍，再看 `term_weight.py` 与 ES 查询；
+- 学重排，先算一次 cross-encoder 分，再看 `rerank_by_model` 怎么合成。
 
-反过来的结果是：你记住了 RAGFlow 的字段名，却说不出原理。
+反过来的结果是：记住了 RAGFlow 的字段名，却说不出原理。
 
 ## 7. 与每日计划的衔接
 
-每天读源码的预算：**15–25 分钟，只读当天锚点那一个函数**。超时就停，记一句"没看懂的是 X"，第二天再花 5 分钟补。
+每天读源码的预算 15–25 分钟，只读当天锚点那一个函数。超时就停，记一句没看懂的是 X，第二天再花 5 分钟补。
 
 记录写在 `learning-log.md`，格式：
 
@@ -207,6 +204,6 @@ Select-String -Path third_party/ragflow-0.27.3/rag/*/*.py -Pattern 'def retrieva
 
 ## 8. 版本提示
 
-- 本文件行号对应 **v0.27.3**；
-- 上游 **v1.0.0 起改为 Go**（`internal/deepdoc`、`internal/engine`、`internal/agentic_rag`），概念一一对应但代码结构不同；
-- 你手上的教程/博客大多基于 0.1x–0.2x，其中 0.19 之前没有 `rag/graphrag/`，0.20 之后才有 `advanced_rag/`，对照时注意。
+- 本文件行号对应 v0.27.3；
+- 上游 v1.0.0 起改为 Go（`internal/deepdoc`、`internal/engine`、`internal/agentic_rag`），概念一一对应但代码结构不同；
+- 手上的教程和博客大多基于 0.1x–0.2x，其中 0.19 之前没有 `rag/graphrag/`，0.20 之后才有 `advanced_rag/`，对照时注意。

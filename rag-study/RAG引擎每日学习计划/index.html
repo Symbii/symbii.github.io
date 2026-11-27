@@ -1,0 +1,3946 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="学习笔记与工程记录">
+      
+      
+        <meta name="author" content="Void_Liao">
+      
+      
+        <link rel="canonical" href="https://symbii.github.io/rag-study/RAG%E5%BC%95%E6%93%8E%E6%AF%8F%E6%97%A5%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/">
+      
+      
+        <link rel="prev" href="../RAG%E5%BC%95%E6%93%8E%E5%AD%A6%E4%B9%A0%E5%9C%B0%E5%9B%BE/">
+      
+      
+        <link rel="next" href="../RAGFlow%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E5%9C%B0%E5%9B%BE/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>RAG 引擎每日学习计划（8 周 · 56 天） - Void_Liao 的博客</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rag-8-56" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Void_Liao 的博客" class="md-header__button md-logo" aria-label="Void_Liao 的博客" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Void_Liao 的博客
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              RAG 引擎每日学习计划（8 周 · 56 天）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切到深色"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切到深色" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切到浅色"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切到浅色" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Void_Liao 的博客" class="md-nav__button md-logo" aria-label="Void_Liao 的博客" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Void_Liao 的博客
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG 学习 56 天
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RAG 学习 56 天
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    复习
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    复习
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D00/00-%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    复习总结
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    D01 · 2026-11-23
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    D01 · 2026-11-23
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/00-%E4%BB%8A%E6%97%A5%E6%A6%82%E8%A7%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    今日概览
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/01-%E9%93%BE%E8%B7%AF%E5%9B%BE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    链路图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/02-%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    论文精读
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/03-%E6%BA%90%E7%A0%81%E5%AF%B9%E7%85%A7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    源码对照
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/04-%E5%A4%8D%E8%BF%B0%E4%B8%8E%E5%8D%A1%E7%82%B9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    复述与卡点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/05-%E6%9C%AF%E8%AF%AD%E6%BE%84%E6%B8%85-%E7%A8%A0%E5%AF%86%E5%90%91%E9%87%8F%E7%B4%A2%E5%BC%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    术语澄清-稠密向量索引
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/06-%E6%89%93%E5%8D%A1%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    打卡总结
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/07-%E5%85%AB%E7%8E%AF%E9%BB%98%E5%86%99/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    八环默写
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/08-%E9%93%BE%E8%B7%AF%E5%9B%BE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    链路图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    D02 · 2026-11-27
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    D02 · 2026-11-27
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D02/00-%E4%BB%8A%E6%97%A5%E6%A6%82%E8%A7%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    今日概览
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D02/00-%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    学习总结
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    参考
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    参考
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../RAG%E5%BC%95%E6%93%8E%E5%AD%A6%E4%B9%A0%E5%9C%B0%E5%9B%BE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG引擎学习地图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG引擎每日学习计划
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG引擎每日学习计划
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#day-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、开始前：环境与工具（半天，可在 Day 1 顺带完成）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、学习材料总表（全部可点击）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、学习材料总表（全部可点击）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        论文（12 篇）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        官方文档（按天引用）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        源码（读目录，不通读）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        可选课程
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、第 1 周：基础底座 + 跑通朴素 RAG
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、第 1 周：基础底座 + 跑通朴素 RAG">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-1-15h-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 1 · 周一 · 1.5h ｜ RAG 到底在解决什么问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-2-15h-embedding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 2 · 周二 · 1.5h ｜ Embedding 与相似度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-3-15h-hnsw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 3 · 周三 · 1.5h ｜ 向量索引：HNSW
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-4-15h-bm25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 4 · 周四 · 1.5h ｜ 关键词检索与 BM25
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-5-2h-naive-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 5 · 周五 · 2h ｜ 手写 naive RAG（里程碑）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-6-2h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 6 · 周六 · 2h ｜ 第一次误差分析
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-7-2h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 7 · 周日 · 2h ｜ 周复盘
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、第 2 周：解析攻坚 + 评测起步
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、第 2 周：解析攻坚 + 评测起步">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-8-15h-pdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 8 · 周一 · 1.5h ｜ PDF 的文本层与结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-9-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 9 · 周二 · 1.5h ｜ 双栏、阅读顺序与页眉页脚
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-10-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 10 · 周三 · 1.5h ｜ 表格抽取
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-11-15h-ocr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 11 · 周四 · 1.5h ｜ 扫描件 OCR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-12-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 12 · 周五 · 1.5h ｜ 其它格式与清洗
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-13-2h-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 13 · 周六 · 2h ｜ 解析 pipeline 整合与失败率统计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-14-25h-30" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 14 · 周日 · 2.5h ｜ 建 30 题评测集（里程碑）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、第 3 周：切分与索引
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、第 3 周：切分与索引">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-15-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 15 · 周一 · 1.5h ｜ 切分策略全景
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-16-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 16 · 周二 · 1.5h ｜ 语义切分
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-17-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 17 · 周三 · 1.5h ｜ 结构化切分与父子块
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-18-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 18 · 周四 · 1.5h ｜ 元数据与标量过滤
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-19-2h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 19 · 周五 · 2h ｜ 向量库选型与建库
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-20-2h-ab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 20 · 周六 · 2h ｜ 切分 A/B 实验
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-21-2h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 21 · 周日 · 2h ｜ 周复盘：写第一份实验报告
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、第 4 周：混合召回
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、第 4 周：混合召回">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-22-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 22 · 周一 · 1.5h ｜ 向量检索的失效边界
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-23-15h-rrf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 23 · 周二 · 1.5h ｜ RRF 融合
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-24-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 24 · 周三 · 1.5h ｜ 多向量与迟交互
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-25-15h-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 25 · 周四 · 1.5h ｜ Query 改写
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-26-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 26 · 周五 · 1.5h ｜ 子问题拆解与意图路由
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-27-2h-ab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 27 · 周六 · 2h ｜ 混合召回 A/B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-28-2h-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 28 · 周日 · 2h ｜ 周复盘：召回漏斗 v1
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、第 5 周：重排与上下文组装
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、第 5 周：重排与上下文组装">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-29-15h-cross-encoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 29 · 周一 · 1.5h ｜ Cross-encoder 重排
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-30-15h-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 30 · 周二 · 1.5h ｜ LLM 重排与成本
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-31-15h-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 31 · 周三 · 1.5h ｜ 过滤：预过滤 vs 后过滤
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-32-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 32 · 周四 · 1.5h ｜ 上下文组装
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-33-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 33 · 周五 · 1.5h ｜ 引用与可追溯
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-34-2h-ab-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 34 · 周六 · 2h ｜ 端到端 A/B（质量-延迟-成本三角）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-35-2h-v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 35 · 周日 · 2h ｜ 周复盘：漏斗 v2 + 选型结论
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、第 6 周：生成、拒答与评测闭环
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="八、第 6 周：生成、拒答与评测闭环">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-36-15h-grounded-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 36 · 周一 · 1.5h ｜ Grounded Generation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-37-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 37 · 周二 · 1.5h ｜ 拒答与不确定表达
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-38-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 38 · 周三 · 1.5h ｜ 多轮对话
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-39-15h-ragas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 39 · 周四 · 1.5h ｜ 评测指标与 RAGAS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-40-2h-100-judge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 40 · 周五 · 2h ｜ 评测集扩到 100 题 + judge 校准
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-41-2h-ci-trace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 41 · 周六 · 2h ｜ CI 回归与 Trace
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-42-2h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 42 · 周日 · 2h ｜ 周复盘：归因报告模板
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        九、第 7 周：工程化（权限、多租户、部署）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="九、第 7 周：工程化（权限、多租户、部署）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-43-15h-acl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 43 · 周一 · 1.5h ｜ ACL 模型与权限同步
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-44-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 44 · 周二 · 1.5h ｜ 过滤下推与越权测试
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-45-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 45 · 周三 · 1.5h ｜ 多租户隔离
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-46-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 46 · 周四 · 1.5h ｜ 增量同步与删除感知
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-47-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 47 · 周五 · 1.5h ｜ 部署形态与扩容
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-48-2h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 48 · 周六 · 2h ｜ 成本与容量估算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-49-2h-v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 49 · 周日 · 2h ｜ 周复盘：架构图 v2 + 风险清单
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、第 8 周：进阶与收尾
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十、第 8 周：进阶与收尾">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-50-15h-agentic-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 50 · 周一 · 1.5h ｜ Agentic RAG
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-51-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 51 · 周二 · 1.5h ｜ 检索原语工具化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-52-2h-graphrag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 52 · 周三 · 2h ｜ GraphRAG 原理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-53-15h-graphrag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 53 · 周四 · 1.5h ｜ GraphRAG 的边界
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-54-15h-vs-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 54 · 周五 · 1.5h ｜ 长上下文 vs RAG
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-55-2h-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 55 · 周六 · 2h ｜ 进阶 demo + 基线对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-56-25h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 56 · 周日 · 2.5h ｜ 总复盘与作品集
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#weekly-reviewmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、每周复盘模板（复制到 weekly-review.md）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十二、落后了怎么办（优先级排序）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十三、每日打卡表（打印用）
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../RAGFlow%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E5%9C%B0%E5%9B%BE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAGFlow源码学习地图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../learning-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    learning-log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../experiments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    experiments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    论文
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    论文
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../papers/RAG-Lewis2020-%E4%B8%AD%E8%8B%B1%E5%AF%B9%E7%85%A7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG-Lewis2020-中英对照
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    关于
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#day-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、开始前：环境与工具（半天，可在 Day 1 顺带完成）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、学习材料总表（全部可点击）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、学习材料总表（全部可点击）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        论文（12 篇）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        官方文档（按天引用）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        源码（读目录，不通读）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        可选课程
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、第 1 周：基础底座 + 跑通朴素 RAG
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、第 1 周：基础底座 + 跑通朴素 RAG">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-1-15h-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 1 · 周一 · 1.5h ｜ RAG 到底在解决什么问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-2-15h-embedding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 2 · 周二 · 1.5h ｜ Embedding 与相似度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-3-15h-hnsw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 3 · 周三 · 1.5h ｜ 向量索引：HNSW
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-4-15h-bm25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 4 · 周四 · 1.5h ｜ 关键词检索与 BM25
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-5-2h-naive-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 5 · 周五 · 2h ｜ 手写 naive RAG（里程碑）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-6-2h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 6 · 周六 · 2h ｜ 第一次误差分析
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-7-2h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 7 · 周日 · 2h ｜ 周复盘
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、第 2 周：解析攻坚 + 评测起步
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、第 2 周：解析攻坚 + 评测起步">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-8-15h-pdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 8 · 周一 · 1.5h ｜ PDF 的文本层与结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-9-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 9 · 周二 · 1.5h ｜ 双栏、阅读顺序与页眉页脚
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-10-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 10 · 周三 · 1.5h ｜ 表格抽取
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-11-15h-ocr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 11 · 周四 · 1.5h ｜ 扫描件 OCR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-12-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 12 · 周五 · 1.5h ｜ 其它格式与清洗
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-13-2h-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 13 · 周六 · 2h ｜ 解析 pipeline 整合与失败率统计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-14-25h-30" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 14 · 周日 · 2.5h ｜ 建 30 题评测集（里程碑）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、第 3 周：切分与索引
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、第 3 周：切分与索引">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-15-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 15 · 周一 · 1.5h ｜ 切分策略全景
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-16-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 16 · 周二 · 1.5h ｜ 语义切分
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-17-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 17 · 周三 · 1.5h ｜ 结构化切分与父子块
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-18-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 18 · 周四 · 1.5h ｜ 元数据与标量过滤
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-19-2h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 19 · 周五 · 2h ｜ 向量库选型与建库
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-20-2h-ab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 20 · 周六 · 2h ｜ 切分 A/B 实验
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-21-2h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 21 · 周日 · 2h ｜ 周复盘：写第一份实验报告
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、第 4 周：混合召回
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、第 4 周：混合召回">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-22-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 22 · 周一 · 1.5h ｜ 向量检索的失效边界
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-23-15h-rrf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 23 · 周二 · 1.5h ｜ RRF 融合
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-24-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 24 · 周三 · 1.5h ｜ 多向量与迟交互
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-25-15h-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 25 · 周四 · 1.5h ｜ Query 改写
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-26-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 26 · 周五 · 1.5h ｜ 子问题拆解与意图路由
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-27-2h-ab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 27 · 周六 · 2h ｜ 混合召回 A/B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-28-2h-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 28 · 周日 · 2h ｜ 周复盘：召回漏斗 v1
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、第 5 周：重排与上下文组装
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、第 5 周：重排与上下文组装">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-29-15h-cross-encoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 29 · 周一 · 1.5h ｜ Cross-encoder 重排
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-30-15h-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 30 · 周二 · 1.5h ｜ LLM 重排与成本
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-31-15h-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 31 · 周三 · 1.5h ｜ 过滤：预过滤 vs 后过滤
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-32-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 32 · 周四 · 1.5h ｜ 上下文组装
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-33-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 33 · 周五 · 1.5h ｜ 引用与可追溯
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-34-2h-ab-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 34 · 周六 · 2h ｜ 端到端 A/B（质量-延迟-成本三角）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-35-2h-v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 35 · 周日 · 2h ｜ 周复盘：漏斗 v2 + 选型结论
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、第 6 周：生成、拒答与评测闭环
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="八、第 6 周：生成、拒答与评测闭环">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-36-15h-grounded-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 36 · 周一 · 1.5h ｜ Grounded Generation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-37-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 37 · 周二 · 1.5h ｜ 拒答与不确定表达
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-38-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 38 · 周三 · 1.5h ｜ 多轮对话
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-39-15h-ragas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 39 · 周四 · 1.5h ｜ 评测指标与 RAGAS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-40-2h-100-judge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 40 · 周五 · 2h ｜ 评测集扩到 100 题 + judge 校准
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-41-2h-ci-trace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 41 · 周六 · 2h ｜ CI 回归与 Trace
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-42-2h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 42 · 周日 · 2h ｜ 周复盘：归因报告模板
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        九、第 7 周：工程化（权限、多租户、部署）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="九、第 7 周：工程化（权限、多租户、部署）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-43-15h-acl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 43 · 周一 · 1.5h ｜ ACL 模型与权限同步
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-44-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 44 · 周二 · 1.5h ｜ 过滤下推与越权测试
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-45-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 45 · 周三 · 1.5h ｜ 多租户隔离
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-46-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 46 · 周四 · 1.5h ｜ 增量同步与删除感知
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-47-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 47 · 周五 · 1.5h ｜ 部署形态与扩容
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-48-2h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 48 · 周六 · 2h ｜ 成本与容量估算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-49-2h-v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 49 · 周日 · 2h ｜ 周复盘：架构图 v2 + 风险清单
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、第 8 周：进阶与收尾
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十、第 8 周：进阶与收尾">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#day-50-15h-agentic-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 50 · 周一 · 1.5h ｜ Agentic RAG
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-51-15h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 51 · 周二 · 1.5h ｜ 检索原语工具化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-52-2h-graphrag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 52 · 周三 · 2h ｜ GraphRAG 原理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-53-15h-graphrag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 53 · 周四 · 1.5h ｜ GraphRAG 的边界
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-54-15h-vs-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 54 · 周五 · 1.5h ｜ 长上下文 vs RAG
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-55-2h-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 55 · 周六 · 2h ｜ 进阶 demo + 基线对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-56-25h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day 56 · 周日 · 2.5h ｜ 总复盘与作品集
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#weekly-reviewmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、每周复盘模板（复制到 weekly-review.md）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十二、落后了怎么办（优先级排序）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十三、每日打卡表（打印用）
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="rag-8-56">RAG 引擎每日学习计划（8 周 · 56 天）<a class="headerlink" href="#rag-8-56" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>配套：<a href="../RAG%E5%BC%95%E6%93%8E%E5%AD%A6%E4%B9%A0%E5%9C%B0%E5%9B%BE/">RAG 引擎学习地图</a> · <a href="../RAGFlow%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E5%9C%B0%E5%9B%BE/">RAGFlow 源码学习地图</a>（每天 15–25 分钟源码对照，逐日锚点见该文档第 4 节） · 项目与学习计划对照（我的 解析服务A / 检索服务B 逐环落点） · 学习笔记归档
+节奏：每周 6 个学习日加 1 个复盘日（周日）。学习日 1.5–2h，复盘日 2–2.5h。
+每天固定三段：读 25min，动手 50min，记录 15min。记录写进 <code>learning-log.md</code>，一天一条，不超过 10 行。
+链接都能直接点；arXiv 点进去可切 HTML/PDF；文档站改版后个别锚点可能失效，404 时在站内搜页面标题。</p>
+</blockquote>
+<hr />
+<h2 id="day-1">一、开始前：环境与工具（半天，可在 Day 1 顺带完成）<a class="headerlink" href="#day-1" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate<span class="w">   </span><span class="c1"># Windows: .venv\Scripts\activate</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span>sentence-transformers<span class="w"> </span>faiss-cpu<span class="w"> </span>rank_bm25<span class="w"> </span>jieba<span class="w"> </span>pymupdf<span class="w"> </span>pdfplumber<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">            </span>python-docx<span class="w"> </span>python-pptx<span class="w"> </span>openpyxl<span class="w"> </span>trafilatura<span class="w"> </span>pandas<span class="w"> </span>numpy<span class="w"> </span>jupyter
+</code></pre></div>
+<ul>
+<li>模型：<a href="https://huggingface.co/BAAI/bge-small-zh-v1.5">bge-small-zh-v1.5</a>（embedding，小、快、中文好）、<a href="https://huggingface.co/BAAI/bge-reranker-v2-m3">bge-reranker-v2-m3</a>（重排，第 5 周用）。</li>
+<li>向量库：先用 <a href="https://github.com/facebookresearch/faiss">FAISS</a> 跑通，第 3 周再上 <a href="https://qdrant.tech/documentation/quickstart/">Qdrant</a>（Docker 一条命令）或 <a href="https://milvus.io/docs">Milvus</a>。</li>
+<li>追踪：一个 <code>experiments.md</code> 表格，日期、假设、配置、指标、结论，所有 A/B 都记这里。</li>
+<li>术语表：<code>glossary.md</code>，每个新术语写一句自己的解释加一个反例。</li>
+</ul>
+<blockquote>
+<p>材料以英文为主。读不懂的段落用 LLM 逐段对照翻译，术语保留英文原文，否则后面看文档会对不上。</p>
+</blockquote>
+<hr />
+<h2 id="_1">二、学习材料总表（全部可点击）<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h3 id="12">论文（12 篇）<a class="headerlink" href="#12" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>论文</th>
+<th>直达链接</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>Lewis et al., <em>RAG</em> (2020)</td>
+<td>https://arxiv.org/abs/2005.11401</td>
+<td>Day 1、36</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Reimers &amp; Gurevych, <em>Sentence-BERT</em> (2019)</td>
+<td>https://arxiv.org/abs/1908.10084</td>
+<td>Day 2</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>Malkov &amp; Yashunin, <em>HNSW</em> (2016)</td>
+<td>https://arxiv.org/abs/1603.09320</td>
+<td>Day 3</td>
+</tr>
+<tr>
+<td>P4</td>
+<td>Karpukhin et al., <em>DPR</em> (2020)</td>
+<td>https://arxiv.org/abs/2004.04906</td>
+<td>Day 22</td>
+</tr>
+<tr>
+<td>P5</td>
+<td>Thakur et al., <em>BEIR</em> (2021)</td>
+<td>https://arxiv.org/abs/2104.08663</td>
+<td>Day 22</td>
+</tr>
+<tr>
+<td>P6</td>
+<td>Khattab &amp; Zaharia, <em>ColBERT</em> (2020)</td>
+<td>https://arxiv.org/abs/2004.12832</td>
+<td>Day 24</td>
+</tr>
+<tr>
+<td>P7</td>
+<td>Gao et al., <em>HyDE</em> (2022)</td>
+<td>https://arxiv.org/abs/2212.10496</td>
+<td>Day 25</td>
+</tr>
+<tr>
+<td>P8</td>
+<td>Liu et al., <em>Lost in the Middle</em> (2023)</td>
+<td>https://arxiv.org/abs/2307.03172</td>
+<td>Day 32</td>
+</tr>
+<tr>
+<td>P9</td>
+<td>Asai et al., <em>Self-RAG</em> (2023)</td>
+<td>https://arxiv.org/abs/2310.11511</td>
+<td>Day 50</td>
+</tr>
+<tr>
+<td>P10</td>
+<td>Yan et al., <em>CRAG</em> (2024)</td>
+<td>https://arxiv.org/abs/2401.15884</td>
+<td>Day 50</td>
+</tr>
+<tr>
+<td>P11</td>
+<td>Edge et al., <em>GraphRAG</em> (2024)</td>
+<td>https://arxiv.org/abs/2404.16130</td>
+<td>Day 52</td>
+</tr>
+<tr>
+<td>P12</td>
+<td>Es et al., <em>RAGAS</em> (2023)</td>
+<td>https://arxiv.org/abs/2309.15217</td>
+<td>Day 39</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">官方文档（按天引用）<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>直达链接</th>
+<th>用在哪天</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PyMuPDF 文本页</td>
+<td>https://pymupdf.readthedocs.io/en/latest/textpage.html</td>
+<td>Day 8</td>
+</tr>
+<tr>
+<td>PyMuPDF 文本配方</td>
+<td>https://pymupdf.readthedocs.io/en/latest/recipes-text.html</td>
+<td>Day 9</td>
+</tr>
+<tr>
+<td>pdfplumber（含可视化调试）</td>
+<td>https://github.com/jsvine/pdfplumber#visual-debugging</td>
+<td>Day 9</td>
+</tr>
+<tr>
+<td>Camelot 原理（lattice/stream）</td>
+<td>https://camelot-py.readthedocs.io/en/stable/user/how-it-works.html</td>
+<td>Day 10</td>
+</tr>
+<tr>
+<td>PaddleOCR</td>
+<td>https://github.com/PaddlePaddle/PaddleOCR</td>
+<td>Day 11</td>
+</tr>
+<tr>
+<td>trafilatura</td>
+<td>https://github.com/adbar/trafilatura</td>
+<td>Day 12</td>
+</tr>
+<tr>
+<td>Qdrant 过滤</td>
+<td>https://qdrant.tech/documentation/concepts/filtering/</td>
+<td>Day 18、31、44</td>
+</tr>
+<tr>
+<td>Qdrant 混合查询</td>
+<td>https://qdrant.tech/documentation/concepts/hybrid-queries/</td>
+<td>Day 23</td>
+</tr>
+<tr>
+<td>Qdrant 多租户</td>
+<td>https://qdrant.tech/documentation/guides/multiple-partitions/</td>
+<td>Day 45</td>
+</tr>
+<tr>
+<td>Milvus 索引</td>
+<td>https://milvus.io/docs/index-vector-fields.md</td>
+<td>Day 19</td>
+</tr>
+<tr>
+<td>Milvus 过滤</td>
+<td>https://milvus.io/docs/boolean.md</td>
+<td>Day 18、31</td>
+</tr>
+<tr>
+<td>Milvus 多租户</td>
+<td>https://milvus.io/docs/multi_tenancy.md</td>
+<td>Day 43、45</td>
+</tr>
+<tr>
+<td>Elasticsearch RRF</td>
+<td>https://www.elastic.co/docs/reference/elasticsearch/rest-apis/reciprocal-rank-fusion</td>
+<td>Day 23</td>
+</tr>
+<tr>
+<td>RAGAS 指标</td>
+<td>https://docs.ragas.io/en/stable/concepts/metrics/</td>
+<td>Day 14、39</td>
+</tr>
+<tr>
+<td>Langfuse 追踪</td>
+<td>https://langfuse.com/docs/observability/get-started</td>
+<td>Day 41</td>
+</tr>
+<tr>
+<td>LlamaIndex 节点解析</td>
+<td>https://docs.llamaindex.ai/en/stable/module_guides/loading/node_parsers/</td>
+<td>Day 15、16、17</td>
+</tr>
+<tr>
+<td>Anthropic 语境增强</td>
+<td>https://www.anthropic.com/news/contextual-retrieval</td>
+<td>Day 16、32</td>
+</tr>
+<tr>
+<td>Keycloak 授权模型</td>
+<td>https://www.keycloak.org/docs/latest/authorization_services/</td>
+<td>Day 43</td>
+</tr>
+<tr>
+<td>OpenAI 工具调用</td>
+<td>https://platform.openai.com/docs/guides/function-calling</td>
+<td>Day 51</td>
+</tr>
+<tr>
+<td>sentence-transformers</td>
+<td>https://www.sbert.net/</td>
+<td>Day 2、29</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_3">源码（读目录，不通读）<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>直达链接</th>
+<th>看什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAGFlow</td>
+<td>https://github.com/infiniflow/ragflow</td>
+<td><code>deepdoc/parser/</code> 解析链路</td>
+</tr>
+<tr>
+<td>Dify</td>
+<td>https://github.com/langgenius/dify</td>
+<td><code>api/core/rag/</code> 切分、索引、检索</td>
+</tr>
+<tr>
+<td>FastGPT</td>
+<td>https://github.com/labring/FastGPT</td>
+<td>知识库产品化封装</td>
+</tr>
+<tr>
+<td>GraphRAG</td>
+<td>https://github.com/microsoft/graphrag</td>
+<td>索引管线与查询</td>
+</tr>
+<tr>
+<td>rank_bm25</td>
+<td>https://github.com/dorianbrown/rank_bm25</td>
+<td><code>BM25Okapi</code> 全部源码（&lt;100 行）</td>
+</tr>
+<tr>
+<td>LlamaIndex 语义切分</td>
+<td>https://github.com/run-llama/llama_index/blob/main/llama-index-core/llama_index/core/node_parser/text/semantic_splitter.py</td>
+<td>断点判定实现</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_4">可选课程<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://www.deeplearning.ai/short-courses/">DeepLearning.AI 短课程列表</a>：找《Building and Evaluating Advanced RAG Applications》（对应第 6 周）与《Advanced Retrieval for AI with Chroma》（对应第 4–5 周）。</li>
+</ul>
+<hr />
+<h2 id="1-rag">三、第 1 周：基础底座 + 跑通朴素 RAG<a class="headerlink" href="#1-rag" title="Permanent link">&para;</a></h2>
+<h3 id="day-1-15h-rag">Day 1 · 周一 · 1.5h ｜ RAG 到底在解决什么问题<a class="headerlink" href="#day-1-15h-rag" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：画一张完整的 RAG 链路图，再跑通第一次 embedding 相似度计算。</li>
+<li>知识点：参数化知识与非参数化知识；retriever–generator 两段式结构；索引期和查询期各管什么；RAG 比微调省在哪，什么场景会失效。</li>
+<li>材料：<a href="https://arxiv.org/abs/2005.11401">RAG 论文 §1 与 §2.1–2.3</a>（训练细节跳过）；<a href="https://huggingface.co/BAAI/bge-small-zh-v1.5">bge-small-zh-v1.5 模型卡</a>（看相似度用法和 instruction 前缀）。</li>
+<li>方法：费曼法。合上论文，用 5 句话复述文档如何变成答案，卡住的地方标红回读；先画图，再写代码。</li>
+<li>验收：图上 8 个环节齐全，每环能说出可能丢什么信息；embedding demo 对 10 个句子两两算相似度。</li>
+</ul>
+<h3 id="day-2-15h-embedding">Day 2 · 周二 · 1.5h ｜ Embedding 与相似度<a class="headerlink" href="#day-2-15h-embedding" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：用 numpy 手写 cosine top-k，拿它检索 1000 条文本。</li>
+<li>知识点：双塔结构、对比学习目标、向量归一化、cosine 与内积与 L2 的等价条件、维度和语义分辨率的关系、中文 tokenizer 的影响。</li>
+<li>材料：<a href="https://arxiv.org/abs/1908.10084">Sentence-BERT §2 结构、§3 训练目标</a>；<a href="https://huggingface.co/BAAI/bge-small-zh-v1.5">bge 模型卡的相似度示例</a>。</li>
+<li>方法：控制变量。同一批向量归一化一次、不归一化一次，各检索一遍，记 Top-5 差异，用差异反推公式。</li>
+<li>验收：能解释为什么归一化后内积等于余弦；手写结果与库结果 Top-10 重合 ≥ 9。</li>
+</ul>
+<h3 id="day-3-15h-hnsw">Day 3 · 周三 · 1.5h ｜ 向量索引：HNSW<a class="headerlink" href="#day-3-15h-hnsw" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：用 FAISS 建 HNSW 索引，测 <code>efSearch</code> 对召回率和延迟的影响。</li>
+<li>知识点：暴力检索的复杂度、ANN 的召回与延迟权衡；HNSW 的分层图，M、efConstruction、efSearch 三个参数；IVF 与 PQ 怎么取舍。</li>
+<li>材料：<a href="https://arxiv.org/abs/1603.09320">HNSW 论文 §2 插入与搜索、§4 实验</a>；<a href="https://github.com/facebookresearch/faiss/wiki">FAISS Wiki</a>（找 <code>IndexHNSWFlat</code> 和参数说明）。</li>
+<li>方法：参数扫描。<code>efSearch ∈ {16, 32, 64, 128, 256}</code>，每组 100 次查询，记 P50/P95 延迟，画召回-延迟曲线。</li>
+<li>验收：能说出 efSearch 调大，召回和延迟都升、内存不变；拐点能解释。</li>
+</ul>
+<h3 id="day-4-15h-bm25">Day 4 · 周四 · 1.5h ｜ 关键词检索与 BM25<a class="headerlink" href="#day-4-15h-bm25" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：手写 BM25 打分，跟 <code>rank_bm25</code> 的结果对齐。</li>
+<li>知识点：TF、IDF、文档长度归一化；k1 和 b 的物理含义；jieba 分词对召回的影响；BM25 在专有名词、型号、错误码上的优势。</li>
+<li>材料：<a href="https://github.com/dorianbrown/rank_bm25">rank_bm25 源码</a>（<code>BM25Okapi</code> 不到 100 行）；<a href="https://github.com/fxsjy/jieba">jieba</a> 的分词模式说明。</li>
+<li>方法：跟读源码，逐行注释，再默写一遍；同一 query 对比分词前后的结果。</li>
+<li>验收：自写分数与库分数误差 &lt; 1e-6；能举 3 个向量检索失败但 BM25 命中的例子。</li>
+</ul>
+<h3 id="day-5-2h-naive-rag">Day 5 · 周五 · 2h ｜ 手写 naive RAG（里程碑）<a class="headerlink" href="#day-5-2h-naive-rag" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：100 行以内实现解析、切分、索引、检索、带引用生成。</li>
+<li>知识点：chunk size 与 overlap 的直觉；Top-k 怎么选；prompt 里上下文和指令怎么排；引用编号从哪来。</li>
+<li>材料：<a href="https://arxiv.org/abs/2005.11401">RAG 论文 §2</a>（带着实现重读）；<a href="https://docs.llamaindex.ai/en/stable/understanding/rag/">LlamaIndex 从零构建 RAG</a>（对照流程即可，不必照抄）。</li>
+<li>方法：先跑通再优化，允许粗糙，但必须端到端；代码单文件，函数不超过 10 个。</li>
+<li>验收：20 个问题都能给出带来源页码的答案；任一答案能点回原文段落。</li>
+</ul>
+<h3 id="day-6-2h">Day 6 · 周六 · 2h ｜ 第一次误差分析<a class="headerlink" href="#day-6-2h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：对 30 条 query 人工归因，产出错误分类表。</li>
+<li>知识点：错误分型，解析错、切分错、没召回、召回但排序差、生成不忠实、本就无答案；归因先于调参。</li>
+<li>材料：自己 Day 5 的日志；<a href="https://arxiv.org/abs/2307.03172">Lost in the Middle 摘要</a>（先建立中间内容容易被忽略的预感）。</li>
+<li>方法：每条错误只归一个主因，写清证据（原文在哪、召回了什么）；不许写效果不好这类结论。</li>
+<li>验收：30 条都有主因；能算出各类型占比，指出最大的一类。</li>
+</ul>
+<h3 id="day-7-2h">Day 7 · 周日 · 2h ｜ 周复盘<a class="headerlink" href="#day-7-2h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：写一页 AAR（预期、实际、差距、下周假设），补齐欠账。</li>
+<li>方法：先写我原本以为…，再写实际是…，最后写下周只改一个变量。</li>
+<li>验收：下周要验证的单个假设写清楚，比如解析错误占错误总数 &gt; 30%。</li>
+</ul>
+<hr />
+<h2 id="2">四、第 2 周：解析攻坚 + 评测起步<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<h3 id="day-8-15h-pdf">Day 8 · 周一 · 1.5h ｜ PDF 的文本层与结构<a class="headerlink" href="#day-8-15h-pdf" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：用 PyMuPDF 提取 block/line/span，打印每块坐标和字号。</li>
+<li>知识点：PDF 没有段落，只有绘制指令；文本层与扫描件的区别；字号、加粗是标题的弱信号；<code>get_text("dict")</code> 的层级。</li>
+<li>材料：<a href="https://pymupdf.readthedocs.io/en/latest/textpage.html">PyMuPDF TextPage 文档</a>；<a href="https://pymupdf.readthedocs.io/en/latest/recipes-text.html">PyMuPDF 文本提取配方</a>。</li>
+<li>方法：可视化。把 bbox 画回页面截图，用眼睛校验结构假设。</li>
+<li>验收：对一份论文能自动标出标题层级，至少 H1/H2 两级。</li>
+</ul>
+<h3 id="day-9-15h">Day 9 · 周二 · 1.5h ｜ 双栏、阅读顺序与页眉页脚<a class="headerlink" href="#day-9-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：让双栏 PDF 按左栏读完再读右栏的顺序输出，剔除页眉页脚。</li>
+<li>知识点：x 方向投影做栏检测；按栏和 y 排序；页面上下各 5% 区域内高频重复的行判为页眉页脚；跨栏图表会打断阅读流。</li>
+<li>材料：<a href="https://github.com/jsvine/pdfplumber#visual-debugging">pdfplumber 文本提取与可视化调试</a>；<a href="https://pymupdf.readthedocs.io/en/latest/recipes-text.html">PyMuPDF 文本配方</a>（看 <code>blocks</code> 排序示例）。</li>
+<li>方法：先目测再编码。5 份双栏论文各截一张块顺序图，肉眼确认后再写规则。</li>
+<li>验收：5 份里至少 4 份顺序正确；能说出两种误判，比如通栏标题、脚注。</li>
+</ul>
+<h3 id="day-10-15h">Day 10 · 周三 · 1.5h ｜ 表格抽取<a class="headerlink" href="#day-10-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：把 10 份含表格的 PDF 转成 Markdown 表格。</li>
+<li>知识点：有线表与无线表的差异；合并单元格；跨页表；转 Markdown 时保留表头的重要性。</li>
+<li>材料：<a href="https://camelot-py.readthedocs.io/en/stable/user/how-it-works.html">Camelot 原理文档</a>；<a href="https://github.com/PaddlePaddle/PaddleOCR">PaddleOCR 的表格识别（PP-Structure）</a>。</li>
+<li>方法：双工具对照。Camelot 和 PP-Structure 各跑一遍，人工比对，记录各自失败类型。</li>
+<li>验收：10 份里至少 7 份结构正确；错误能归到无线表、合并单元格、跨页三类。</li>
+</ul>
+<h3 id="day-11-15h-ocr">Day 11 · 周四 · 1.5h ｜ 扫描件 OCR<a class="headerlink" href="#day-11-15h-ocr" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：对 5 份扫描 PDF 做 OCR，输出带置信度的文本。</li>
+<li>知识点：det、rec、cls 三阶段；图像预处理，灰度、二值化、去噪、纠偏；置信度阈值和人工复核队列；OCR 错误对检索的连锁影响。</li>
+<li>材料：<a href="https://github.com/PaddlePaddle/PaddleOCR">PaddleOCR 快速开始</a>（README 里的 Quick Start 与 det/rec 说明）。</li>
+<li>方法：拆流水线。先只跑 det 看框，再加 rec，最后加 cls，逐段确认问题出在哪。</li>
+<li>验收：5 份平均字符准确率 ≥ 95%（人工抽 100 字）；低置信度片段单独标记。</li>
+</ul>
+<h3 id="day-12-15h">Day 12 · 周五 · 1.5h ｜ 其它格式与清洗<a class="headerlink" href="#day-12-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：写一个统一入口，支持 docx、pptx、xlsx、html、md 和代码文件。</li>
+<li>知识点：docx 的段落与表格分离；pptx 的备注页；xlsx 的多 sheet；HTML 正文抽取；编码与乱码；SimHash 去重；水印与重复页眉。</li>
+<li>材料：<a href="https://github.com/adbar/trafilatura">trafilatura</a>（网页正文抽取示例）；<a href="https://python-docx.readthedocs.io/en/latest/">python-docx</a>、<a href="https://python-pptx.readthedocs.io/en/latest/">python-pptx</a>、<a href="https://openpyxl.readthedocs.io/en/stable/">openpyxl</a> 的快速入门页。</li>
+<li>方法：以终为始。先定义统一的 <code>Document</code> 结构（doc_id, page, type, text, bbox, meta），再让每个解析器往里填。</li>
+<li>验收：6 种格式都产出同一结构；重复文档能被 SimHash 查出。</li>
+</ul>
+<h3 id="day-13-2h-pipeline">Day 13 · 周六 · 2h ｜ 解析 pipeline 整合与失败率统计<a class="headerlink" href="#day-13-2h-pipeline" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：跑 50 份真实文档，产出解析质量报告。</li>
+<li>知识点：失败率按文档类型分层统计；分层抽样；解析失败的可观测信号，空文本、字符数异常、乱码率。</li>
+<li>材料：自己前 5 天的代码；<a href="https://github.com/infiniflow/ragflow/tree/main/deepdoc/parser">RAGFlow 解析模块</a>（对照工业实现的分层设计）。</li>
+<li>方法：埋点。每个解析器记耗时、字符数、异常类型；报告只回答哪类文档失败率最高。</li>
+<li>验收：报告含每类文档的失败率和 Top-3 失败原因；抽检 20 份，人工判定与自动判定一致率 ≥ 80%。</li>
+</ul>
+<h3 id="day-14-25h-30">Day 14 · 周日 · 2.5h ｜ 建 30 题评测集（里程碑）<a class="headerlink" href="#day-14-25h-30" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：产出第一版评测集，包含问题、标准答案、金标片段、难度。</li>
+<li>知识点：评测集来源，真实提问、文档标题改写、跨文档问题；金标片段的最小粒度；难度分层；无答案题必须占一定比例。</li>
+<li>材料：<a href="https://docs.ragas.io/en/stable/concepts/metrics/">RAGAS 指标文档</a>（先知道要测什么，再决定标什么）。</li>
+<li>方法：三人独立标注再对齐，没有第三个人就隔天自标一遍；分歧处讨论定规则，写进 <code>eval-rules.md</code>。</li>
+<li>验收：30 题里至少 5 题无答案；每题都有金标片段；标注规则成文。</li>
+</ul>
+<hr />
+<h2 id="3">五、第 3 周：切分与索引<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="day-15-15h">Day 15 · 周一 · 1.5h ｜ 切分策略全景<a class="headerlink" href="#day-15-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：实现固定窗口和递归切分，对比块边界。</li>
+<li>知识点：固定窗口的截断问题；递归切分按分隔符优先级走，段落、句号、逗号；中文标点和英文的差异；overlap 的作用和代价。</li>
+<li>材料：<a href="https://docs.llamaindex.ai/en/stable/module_guides/loading/node_parsers/">LlamaIndex 节点解析文档</a>；<a href="https://github.com/langgenius/dify/tree/main/api/core/rag">Dify 切分实现</a>（读函数签名即可）。</li>
+<li>方法：打印边界。把每块首 20 字和尾 20 字打出来，用眼睛判断有没有切断语义。</li>
+<li>验收：能说出递归切分在什么文档上仍会切断表格；两种策略的块长分布画成直方图。</li>
+</ul>
+<h3 id="day-16-15h">Day 16 · 周二 · 1.5h ｜ 语义切分<a class="headerlink" href="#day-16-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：用相邻句 embedding 相似度做断点，实现语义切分。</li>
+<li>知识点：断点阈值；滑动窗口平滑；计算成本，每句一次 embedding；语义切分在长文档上的收益和噪声。</li>
+<li>材料：<a href="https://github.com/run-llama/llama_index/blob/main/llama-index-core/llama_index/core/node_parser/text/semantic_splitter.py">LlamaIndex 语义切分源码</a>；<a href="https://www.anthropic.com/news/contextual-retrieval">Anthropic 语境增强检索</a>（看它为什么给块加语境）。</li>
+<li>方法：阈值扫描，0.5、0.6、0.7 各跑一遍，看块数和块长，选块数合理、边界可读的那档。</li>
+<li>验收：能给出阈值-块数曲线；随机抽 10 块，8 块以上是完整语义单元。</li>
+</ul>
+<h3 id="day-17-15h">Day 17 · 周三 · 1.5h ｜ 结构化切分与父子块<a class="headerlink" href="#day-17-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：按标题层级建树，检索叶子块、返回父块。</li>
+<li>知识点：文档树，章、节、段；小块检索、大块生成；父块 token 上限；表格和列表作为原子块不切。</li>
+<li>材料：<a href="https://docs.llamaindex.ai/en/stable/module_guides/loading/node_parsers/">LlamaIndex 层级解析与自动合并</a>（找 HierarchicalNodeParser / AutoMergingRetriever）；<a href="https://github.com/infiniflow/ragflow/tree/main/deepdoc/parser">RAGFlow 结构化输出</a>。</li>
+<li>方法：反推设计。先问生成时需要多大上下文，再定父块大小，别拍脑袋。</li>
+<li>验收：同一问题下，父子块的答案完整度明显优于纯小块（人工评 10 题）。</li>
+</ul>
+<h3 id="day-18-15h">Day 18 · 周四 · 1.5h ｜ 元数据与标量过滤<a class="headerlink" href="#day-18-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：给每个块补齐元数据，实现按部门、时间过滤检索。</li>
+<li>知识点：标题路径、页码、来源、更新时间、部门与密级标签；过滤字段的基数和索引代价；过滤与向量检索的执行顺序。</li>
+<li>材料：<a href="https://qdrant.tech/documentation/concepts/filtering/">Qdrant 过滤与 payload 索引</a>；<a href="https://milvus.io/docs/boolean.md">Milvus 布尔表达式</a>。</li>
+<li>方法：先设计再落库。画一张字段、类型、是否可过滤、是否展示的表，评审后再建索引。</li>
+<li>验收：能按部门 = X 且时间 &gt; Y 过滤后检索；过滤后召回率的下降有量化。</li>
+</ul>
+<h3 id="day-19-2h">Day 19 · 周五 · 2h ｜ 向量库选型与建库<a class="headerlink" href="#day-19-2h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：用 Qdrant（或 Milvus Lite）建 collection，导入 1 万个块。</li>
+<li>知识点：collection、partition、payload 各自是什么；HNSW 参数在库里的映射；批量写入与建索引耗时；快照与备份。</li>
+<li>材料：<a href="https://qdrant.tech/documentation/quickstart/">Qdrant 快速开始</a>与<a href="https://qdrant.tech/documentation/concepts/collections/">集合配置</a>；<a href="https://milvus.io/docs/index-vector-fields.md">Milvus 索引文档</a>。</li>
+<li>方法：小规模验证。先 1000 条验证写入和查询，再扩到 1 万，记录耗时曲线。</li>
+<li>验收：1 万块导入成功；查询 P95 &lt; 100ms；能说清三者在运维上的差异。</li>
+</ul>
+<h3 id="day-20-2h-ab">Day 20 · 周六 · 2h ｜ 切分 A/B 实验<a class="headerlink" href="#day-20-2h-ab" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：三种切分各跑同一套 30 题，产出 Recall@5 对比。</li>
+<li>知识点：控制变量，同 embedding、同 Top-k、同评测集；Recall@k 和 MRR 的定义；块长与召回的非线性关系。</li>
+<li>材料：Day 14 的评测集；<code>experiments.md</code> 模板。</li>
+<li>方法：一次只变一个因素；每组跑 3 次取均值，记录方差。</li>
+<li>验收：报告含三组 Recall@5、MRR、平均块长、索引大小；结论落到选哪种、为什么。</li>
+</ul>
+<h3 id="day-21-2h">Day 21 · 周日 · 2h ｜ 周复盘：写第一份实验报告<a class="headerlink" href="#day-21-2h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：把 Day 20 整理成一份报告，按假设、设置、结果、结论、下一步写。</li>
+<li>方法：用如果重做一次我会先测什么结尾，练实验设计。</li>
+<li>验收：报告能让别人复现；评测集的修正项已回写。</li>
+</ul>
+<hr />
+<h2 id="4">六、第 4 周：混合召回<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<h3 id="day-22-15h">Day 22 · 周一 · 1.5h ｜ 向量检索的失效边界<a class="headerlink" href="#day-22-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：构造 20 条型号、错误码、人名类的 query，验证 dense 和 sparse 的差异。</li>
+<li>知识点：DPR 双塔与难负例；BEIR 的核心结论，BM25 是强基线，跨域时 dense 未必赢；OOD 查询。</li>
+<li>材料：<a href="https://arxiv.org/abs/2004.04906">DPR §2–3</a>；<a href="https://arxiv.org/abs/2104.08663">BEIR 摘要与结论表</a>。</li>
+<li>方法：对抗性构造。专门找 embedding 语义相近但答案错的例子，攒成失败案例库。</li>
+<li>验收：能列出 dense 和 sparse 各自胜出的 query 类型，每类至少 3 例。</li>
+</ul>
+<h3 id="day-23-15h-rrf">Day 23 · 周二 · 1.5h ｜ RRF 融合<a class="headerlink" href="#day-23-15h-rrf" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：实现 RRF，和分数归一化加权融合对比。</li>
+<li>知识点：RRF 公式 <code>1/(k + rank)</code>；k=60 的经验来源；排名融合为什么对分数尺度不敏感；加权 RRF。</li>
+<li>材料：<a href="https://www.elastic.co/docs/reference/elasticsearch/rest-apis/reciprocal-rank-fusion">Elasticsearch RRF 文档</a>；<a href="https://qdrant.tech/documentation/concepts/hybrid-queries/">Qdrant 混合查询</a>。</li>
+<li>方法：消融。只保留向量、只保留 BM25、两者融合，看 Recall@5 的增量来自谁。</li>
+<li>验收：融合后 Recall@5 比单路提升 ≥ 5 个百分点，或能解释为什么没有。</li>
+</ul>
+<h3 id="day-24-15h">Day 24 · 周三 · 1.5h ｜ 多向量与迟交互<a class="headerlink" href="#day-24-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：用 bge-m3 的多向量能力（或 ColBERT 实现）做一次检索对比。</li>
+<li>知识点：ColBERT 的 late interaction 与 MaxSim；token 级向量带来的存储放大；和 cross-encoder 的区别，一个用于召回，一个用于重排。</li>
+<li>材料：<a href="https://arxiv.org/abs/2004.12832">ColBERT §2 架构图</a>；<a href="https://huggingface.co/BAAI/bge-m3">bge-m3 模型卡</a>的多向量说明。</li>
+<li>方法：算成本账。估 100 万块的存储和查询开销，再决定值不值。</li>
+<li>验收：能说清 late interaction 为什么比单向量贵、却比 cross-encoder 便宜。</li>
+</ul>
+<h3 id="day-25-15h-query">Day 25 · 周四 · 1.5h ｜ Query 改写<a class="headerlink" href="#day-25-15h-query" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：实现多查询扩展和 HyDE，各测 10 题。</li>
+<li>知识点：多查询的召回增益与延迟代价；HyDE 拿假设答案去检索的原理和风险，假设错就全错；改写要保留实体和限定词。</li>
+<li>材料：<a href="https://arxiv.org/abs/2212.10496">HyDE §2 方法</a>；<a href="https://docs.llamaindex.ai/en/stable/optimizing/advanced_retrieval/query_transformations/">LlamaIndex 查询变换</a>。</li>
+<li>方法：错误注入。故意让改写漏掉年份、型号，看召回怎么崩，攒一份改写禁忌清单。</li>
+<li>验收：两种方法的 Recall 增益和延迟增量都有数字；能说出各自适用场景。</li>
+</ul>
+<h3 id="day-26-15h">Day 26 · 周五 · 1.5h ｜ 子问题拆解与意图路由<a class="headerlink" href="#day-26-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：把一个复合问题拆成 2–3 个子查询，分别检索再合并。</li>
+<li>知识点：复合问题的类型，比较、聚合、多跳；拆解 prompt 的设计；路由到不同索引，制度库、产品库、工单库。</li>
+<li>材料：<a href="https://docs.llamaindex.ai/en/stable/examples/query_engine/sub_question_query_engine/">LlamaIndex SubQuestion 查询引擎</a>（读流程即可）。</li>
+<li>方法：手工先跑。先人工拆 10 个问题验证收益，再让 LLM 拆，比较两者差距。</li>
+<li>验收：复合问题的人工评分提升可量化；拆解失败的模式有记录。</li>
+</ul>
+<h3 id="day-27-2h-ab">Day 27 · 周六 · 2h ｜ 混合召回 A/B<a class="headerlink" href="#day-27-2h-ab" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：四组配置，纯向量、纯 BM25、RRF、加权，跑 50 题。</li>
+<li>知识点：指标口径统一；P95 延迟怎么测；成本按每次查询的 embedding 加检索调用算。</li>
+<li>材料：前几天的实现；<code>experiments.md</code>。</li>
+<li>方法：盲评。生成结果去掉配置标签再人工打分，避免知道是哪个方案就偏袒。</li>
+<li>验收：四组指标表完整；结论能回答多花的延迟买到了多少召回。</li>
+</ul>
+<h3 id="day-28-2h-v1">Day 28 · 周日 · 2h ｜ 周复盘：召回漏斗 v1<a class="headerlink" href="#day-28-2h-v1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：画候选、过滤、融合、Top-k 的漏斗，标每层数量和损失。</li>
+<li>方法：用真实 query 的数字填漏斗，不接受估算。</li>
+<li>验收：能指出漏斗最窄的一层，给出下周的单个优化假设。</li>
+</ul>
+<hr />
+<h2 id="5">七、第 5 周：重排与上下文组装<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<h3 id="day-29-15h-cross-encoder">Day 29 · 周一 · 1.5h ｜ Cross-encoder 重排<a class="headerlink" href="#day-29-15h-cross-encoder" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：接入 bge-reranker-v2-m3，对 Top-50 重排取 Top-5。</li>
+<li>知识点：双塔与交叉编码器的区别，后者能看到 query-doc 交互；输入截断长度；batch 与显存；重排的边际收益随召回质量变化。</li>
+<li>材料：<a href="https://huggingface.co/BAAI/bge-reranker-v2-m3">bge-reranker-v2-m3 模型卡</a>；<a href="https://www.sbert.net/docs/cross_encoder/usage/usage.html">sentence-transformers CrossEncoder 用法</a>。</li>
+<li>方法：分层测试。分别对召回好和召回差的 query 看重排收益，验证重排救不了没召回。</li>
+<li>验收：nDCG@10 提升有数字；能画出重排前后 Top-5 变化的例子。</li>
+</ul>
+<h3 id="day-30-15h-llm">Day 30 · 周二 · 1.5h ｜ LLM 重排与成本<a class="headerlink" href="#day-30-15h-llm" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：用 LLM 做 listwise 重排，和 cross-encoder 比质量、延迟、成本。</li>
+<li>知识点：pointwise、pairwise、listwise 三种范式；上下文长度导致的截断；缓存与批处理；什么时候不值得用 LLM 重排。</li>
+<li>材料：<a href="https://arxiv.org/abs/2304.09542">RankGPT 论文</a>（listwise 重排的代表工作）。</li>
+<li>方法：三角对比。同 20 题，记质量、P95 延迟、单次成本三个数，画散点。</li>
+<li>验收：能给出什么规模、什么延迟预算下选哪种的决策规则。</li>
+</ul>
+<h3 id="day-31-15h-vs">Day 31 · 周三 · 1.5h ｜ 过滤：预过滤 vs 后过滤<a class="headerlink" href="#day-31-15h-vs" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：实现两种过滤顺序，构造过滤后召回不足的案例。</li>
+<li>知识点：预过滤（检索时带条件）和后过滤（检索后删）的差异；后过滤会让 Top-k 实际不足；过滤字段的选择性；权限场景必须预过滤。</li>
+<li>材料：<a href="https://qdrant.tech/documentation/concepts/filtering/">Qdrant 过滤的 must/should 语义</a>；<a href="https://milvus.io/docs/boolean.md">Milvus 布尔表达式</a>。</li>
+<li>方法：极端构造。把过滤条件设成只命中 1% 数据，看后过滤的召回怎么崩。</li>
+<li>验收：能量化两种顺序的召回差异；能写出过滤下推的检查清单。</li>
+</ul>
+<h3 id="day-32-15h">Day 32 · 周四 · 1.5h ｜ 上下文组装<a class="headerlink" href="#day-32-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：实现去重、邻近块扩展、按 token 预算分配上下文。</li>
+<li>知识点：MMR 去冗余；相邻块合并；Lost in the Middle 的位置效应，重要内容放头尾；token 预算按相关性分，不平均分。</li>
+<li>材料：<a href="https://arxiv.org/abs/2307.03172">Lost in the Middle §3–4（U 型曲线）</a>；<a href="https://www.anthropic.com/news/contextual-retrieval">Anthropic 语境增强</a>。</li>
+<li>方法：顺序实验。同一组块，正序、逆序、头尾放置三种排法，看答案差异。</li>
+<li>验收：能复现中间位置信息被忽略的现象；组装后的上下文长度可控。</li>
+</ul>
+<h3 id="day-33-15h">Day 33 · 周五 · 1.5h ｜ 引用与可追溯<a class="headerlink" href="#day-33-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：让每个引用能定位到原文页码和 bbox，在 UI 或终端高亮。</li>
+<li>知识点：块 id 与原文坐标的映射；引用编号的稳定性；模型编造引用的检测，引用编号必须在给定集合内；多块合并后的引用归属。</li>
+<li>材料：Day 5 的 citation 实现；<a href="https://github.com/infiniflow/ragflow">RAGFlow 的引用回溯设计</a>（读接口和数据结构）。</li>
+<li>方法：反向校验。从答案里的每个引用出发，检查它是否真支持该句，统计引用不支持的比例。</li>
+<li>验收：引用可点击回溯；引用不支持的比例 &lt; 5%。</li>
+</ul>
+<h3 id="day-34-2h-ab-">Day 34 · 周六 · 2h ｜ 端到端 A/B（质量-延迟-成本三角）<a class="headerlink" href="#day-34-2h-ab-" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：四组配置跑 50 题，产出质量、延迟、成本的三角对比图。</li>
+<li>知识点：端到端指标（faithfulness、答案正确率）与中间指标（Recall、nDCG）的关系；延迟拆解，检索、重排、生成；成本口径。</li>
+<li>材料：<code>experiments.md</code>；Day 14 评测集。</li>
+<li>方法：固定预算对比。在 P95 延迟 ≤ 3s 的约束下比质量，不无限堆算力。</li>
+<li>验收：能回答多花 800ms 换 6 个点准确率值不值。</li>
+</ul>
+<h3 id="day-35-2h-v2">Day 35 · 周日 · 2h ｜ 周复盘：漏斗 v2 + 选型结论<a class="headerlink" href="#day-35-2h-v2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：更新漏斗，写一页最终检索方案的说明。</li>
+<li>方法：找个没参与的人按文档复现，卡住的地方就是文档缺陷。</li>
+<li>验收：方案说明含参数、指标、失败边界。</li>
+</ul>
+<hr />
+<h2 id="6">八、第 6 周：生成、拒答与评测闭环<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<h3 id="day-36-15h-grounded-generation">Day 36 · 周一 · 1.5h ｜ Grounded Generation<a class="headerlink" href="#day-36-15h-grounded-generation" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：重写 prompt，让答案严格基于上下文，逐句标注引用。</li>
+<li>知识点：指令、上下文、输出格式的三段式；只依据上下文这条约束该有多强；few-shot 示例的作用；温度设为 0 的必要性。</li>
+<li>材料：<a href="https://arxiv.org/abs/2005.11401">RAG 论文 §2 生成部分</a>；<a href="https://www.anthropic.com/news/contextual-retrieval">Anthropic 引用实践</a>（看上下文如何影响答案忠实度）。</li>
+<li>方法：对抗测试。给一个上下文里没有的问题，看模型是否老实说不知道。</li>
+<li>验收：30 题里引用支持率 ≥ 95%；无答案题的编造率显著下降。</li>
+</ul>
+<h3 id="day-37-15h">Day 37 · 周二 · 1.5h ｜ 拒答与不确定表达<a class="headerlink" href="#day-37-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：实现检索分数阈值加 LLM 自评的双重拒答。</li>
+<li>知识点：误拒与漏拒的权衡；阈值校准，用评测集画 PR 曲线；部分回答加说明缺什么的中间态。</li>
+<li>材料：Day 14 评测集里的无答案题；<a href="https://docs.ragas.io/en/stable/concepts/metrics/">RAGAS 的 answer relevancy 定义</a>。</li>
+<li>方法：阈值扫描。30 题上看拒答率和误拒率，选业务可接受的工作点。</li>
+<li>验收：无答案拒答率 ≥ 80%，误拒率 ≤ 10%；工作点有数据支撑。</li>
+</ul>
+<h3 id="day-38-15h">Day 38 · 周三 · 1.5h ｜ 多轮对话<a class="headerlink" href="#day-38-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：实现基于历史的 query 改写（指代消解），加会话摘要。</li>
+<li>知识点：多轮指代，像它、这个方案这类词；历史过长时的压缩策略；改写引入的漂移；话题切换检测。</li>
+<li>材料：<a href="https://docs.llamaindex.ai/en/stable/examples/chat_engine/chat_engine_condense_question/">LlamaIndex 对话式检索</a>；<a href="https://github.com/langgenius/dify">Dify 会话变量设计</a>。</li>
+<li>方法：构造多轮脚本，每轮只改一个指代，看改写是否跟上。</li>
+<li>验收：10 组多轮对话里，指代改写正确率 ≥ 8/10。</li>
+</ul>
+<h3 id="day-39-15h-ragas">Day 39 · 周四 · 1.5h ｜ 评测指标与 RAGAS<a class="headerlink" href="#day-39-15h-ragas" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：用 RAGAS 跑一遍现有系统，拿到四个核心指标。</li>
+<li>知识点：faithfulness、answer relevancy、context precision、context recall 的计算逻辑；LLM-as-judge 的角色；指标之间的依赖关系。</li>
+<li>材料：<a href="https://arxiv.org/abs/2309.15217">RAGAS §2 指标定义</a>；<a href="https://docs.ragas.io/en/stable/concepts/metrics/">RAGAS 指标文档</a>。</li>
+<li>方法：手工对照。抽 5 条自己算一遍 faithfulness，和工具结果比，理解差异来源。</li>
+<li>验收：四个指标能解释各自对应链路的哪一环。</li>
+</ul>
+<h3 id="day-40-2h-100-judge">Day 40 · 周五 · 2h ｜ 评测集扩到 100 题 + judge 校准<a class="headerlink" href="#day-40-2h-100-judge" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：扩题，校准 LLM judge，与人工 30 题比对一致性。</li>
+<li>知识点：题目分布，单跳、多跳、比较、无答案；judge 的长度偏差和位置偏差；Cohen's kappa；评分 rubric 怎么写。</li>
+<li>材料：Day 14 的标注规则；<a href="https://docs.ragas.io/en/stable/getstarted/evaluation/">RAGAS 评测流程</a>。</li>
+<li>方法：双盲。人工先评，再让 judge 评，最后比对；分歧样本逐条讨论定规则。</li>
+<li>验收：judge 与人工一致率 ≥ 85%；分歧类型归类记录。</li>
+</ul>
+<h3 id="day-41-2h-ci-trace">Day 41 · 周六 · 2h ｜ CI 回归与 Trace<a class="headerlink" href="#day-41-2h-ci-trace" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：把评测接进 pytest，每次改动自动跑并输出对比。</li>
+<li>知识点：评测的门禁阈值；回归基线的维护；trace 的 span 划分，检索、重排、生成；token 与延迟归因。</li>
+<li>材料：<a href="https://langfuse.com/docs/observability/get-started">Langfuse 追踪入门</a>；<a href="https://docs.pytest.org/en/stable/how-to/parametrize.html">pytest 参数化</a>。</li>
+<li>方法：先手动跑通一次完整链路 trace，再自动化；报告只保留变化了的指标。</li>
+<li>验收：一次改动后 10 分钟内拿到指标 diff 和归因。</li>
+</ul>
+<h3 id="day-42-2h">Day 42 · 周日 · 2h ｜ 周复盘：归因报告模板<a class="headerlink" href="#day-42-2h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：固化改动、指标、归因、结论四段的模板。</li>
+<li>验收：模板能套到下一次改动，不需要额外解释。</li>
+</ul>
+<hr />
+<h2 id="7">九、第 7 周：工程化（权限、多租户、部署）<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<h3 id="day-43-15h-acl">Day 43 · 周一 · 1.5h ｜ ACL 模型与权限同步<a class="headerlink" href="#day-43-15h-acl" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：设计文档级加行级 ACL，画出权限数据模型。</li>
+<li>知识点：ACL、RBAC、ABAC 的取舍；文档继承目录权限；权限同步，LDAP、SCIM、组织架构 API；权限变更的传播延迟。</li>
+<li>材料：<a href="https://www.keycloak.org/docs/latest/authorization_services/">Keycloak 授权服务</a>（RBAC/ABAC 的工业实现）；<a href="https://milvus.io/docs/multi_tenancy.md">Milvus 多租户</a>。</li>
+<li>方法：从事故反推。假设员工转岗后仍能搜到原部门文档，倒推需要哪些字段和同步机制。</li>
+<li>验收：模型能表达部门、密级、项目组三种维度。</li>
+</ul>
+<h3 id="day-44-15h">Day 44 · 周二 · 1.5h ｜ 过滤下推与越权测试<a class="headerlink" href="#day-44-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：把权限条件注入检索，写 10 条越权用例。</li>
+<li>知识点：检索前注入与检索后删除；空结果即拒绝（fail-closed）；日志和缓存里的越权泄露；超级管理员的审计。</li>
+<li>材料：<a href="https://qdrant.tech/documentation/concepts/filtering/">Qdrant 过滤</a>；Day 31 的过滤实现。</li>
+<li>方法：红队思维。自己扮演越权者，构造跨部门、跨租户、已删除文档、共享链接四类攻击。</li>
+<li>验收：10 条用例全绿；越权尝试全部记录在案。</li>
+</ul>
+<h3 id="day-45-15h">Day 45 · 周三 · 1.5h ｜ 多租户隔离<a class="headerlink" href="#day-45-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：实现租户隔离（独立 collection 或 tenant_id 过滤），加配额。</li>
+<li>知识点：隔离级别与成本，独立库最贵、行级最便宜但最易错；租户 id 的强约束；配额与限流；冷热数据分离。</li>
+<li>材料：<a href="https://qdrant.tech/documentation/guides/multiple-partitions/">Qdrant 多租户指南</a>；<a href="https://milvus.io/docs/multi_tenancy.md">Milvus 多租户</a>。</li>
+<li>方法：故障演练。故意漏传 tenant_id，看系统是报错还是返回全量。</li>
+<li>验收：漏传 tenant_id 时请求被拒；跨租户查询测试全绿。</li>
+</ul>
+<h3 id="day-46-15h">Day 46 · 周四 · 1.5h ｜ 增量同步与删除感知<a class="headerlink" href="#day-46-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：实现基于 mtime/webhook 的增量索引和 tombstone 删除。</li>
+<li>知识点：变更捕获；幂等写入；删除的三种处理，硬删、软删、标记后重建；索引与原文的一致性；重建和增量的成本。</li>
+<li>材料：<a href="https://docs.airbyte.com/using-airbyte/core-concepts/sync-modes/">Airbyte 同步模式</a>（增量同步的通用设计）。</li>
+<li>方法：一致性检查。定时比对原文集合和索引集合的差集。</li>
+<li>验收：删除的文档 1 分钟内不可检索；重复同步不产生重复块。</li>
+</ul>
+<h3 id="day-47-15h">Day 47 · 周五 · 1.5h ｜ 部署形态与扩容<a class="headerlink" href="#day-47-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：容器化部署，写一份私有化交付清单。</li>
+<li>知识点：CPU 推理与 GPU 推理的取舍；国产化和信创适配，embedding 模型替换；水平扩展与无状态化；缓存，embedding 缓存、答案缓存；限流。</li>
+<li>材料：<a href="https://qdrant.tech/documentation/guides/installation/">Qdrant 安装部署</a>；<a href="https://www.sbert.net/">sentence-transformers 的 CPU 推理</a>。</li>
+<li>方法：压测。10 并发跑 100 次查询，记 P50、P95、错误率。</li>
+<li>验收：交付清单含依赖、端口、资源、备份、升级步骤。</li>
+</ul>
+<h3 id="day-48-2h">Day 48 · 周六 · 2h ｜ 成本与容量估算<a class="headerlink" href="#day-48-2h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：估算 100 万文档的月度成本和所需资源。</li>
+<li>知识点：embedding 成本（token 数 × 单价）、重排成本（QPS × 单价）、存储（向量维度 × 数量 × 副本）、生成成本。</li>
+<li>材料：各模型厂商定价页（用你自己的实际单价）；<a href="https://qdrant.tech/documentation/guides/capacity-planning/">Qdrant 容量规划</a>。</li>
+<li>方法：自下而上。按文档数、块数、token 数、调用次数逐层推，不接受大概。</li>
+<li>验收：一张成本表，附一句结论，瓶颈在存储还是推理。</li>
+</ul>
+<h3 id="day-49-2h-v2">Day 49 · 周日 · 2h ｜ 周复盘：架构图 v2 + 风险清单<a class="headerlink" href="#day-49-2h-v2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：画出含权限、租户、增量、监控的完整架构图，列 Top-5 风险。</li>
+<li>方法：让架构图能回答一条文档从上传到被检索中间经过哪些组件、失败会怎样。</li>
+<li>验收：每个组件标了失败模式和降级策略。</li>
+</ul>
+<hr />
+<h2 id="8">十、第 8 周：进阶与收尾<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
+<h3 id="day-50-15h-agentic-rag">Day 50 · 周一 · 1.5h ｜ Agentic RAG<a class="headerlink" href="#day-50-15h-agentic-rag" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：实现检索、自评、再检索的两轮循环。</li>
+<li>知识点：Self-RAG 的反思 token，是否检索、是否相关、是否支持；CRAG 的检索评估器与查询分解；循环的停止条件和最大轮次；延迟成本。</li>
+<li>材料：<a href="https://arxiv.org/abs/2310.11511">Self-RAG §2</a>；<a href="https://arxiv.org/abs/2401.15884">CRAG §2</a>。</li>
+<li>方法：限定轮次，最多 2 轮，看第二轮是否真救回了第一轮的错误。</li>
+<li>验收：能给出多一轮带来多少准确率、多少延迟的数字。</li>
+</ul>
+<h3 id="day-51-15h">Day 51 · 周二 · 1.5h ｜ 检索原语工具化<a class="headerlink" href="#day-51-15h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：把 search、filter、fetch、list_sources 暴露成 Agent 工具。</li>
+<li>知识点：工具描述即 prompt；参数设计，top_k、时间范围、来源过滤；工具返回的截断与摘要；失败重试与降级。</li>
+<li>材料：<a href="https://platform.openai.com/docs/guides/function-calling">OpenAI 工具调用文档</a>；<a href="https://python.langchain.com/docs/how_to/custom_tools/">LangChain 工具定义</a>。</li>
+<li>方法：从调用日志反推，看模型最常传错哪个参数，就改哪个描述。</li>
+<li>验收：模型能自己决定先 filter 再 search，不用人工指定。</li>
+</ul>
+<h3 id="day-52-2h-graphrag">Day 52 · 周三 · 2h ｜ GraphRAG 原理<a class="headerlink" href="#day-52-2h-graphrag" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：跑通一个小规模 GraphRAG，100 份文档。</li>
+<li>知识点：实体和关系抽取；社区检测，Leiden；社区摘要；全局查询与局部查询；索引成本。</li>
+<li>材料：<a href="https://arxiv.org/abs/2404.16130">GraphRAG §2 索引管线、§3 查询模式</a>；<a href="https://github.com/microsoft/graphrag">GraphRAG 官方仓库</a>（quickstart）。</li>
+<li>方法：先看成本再动手，估 LLM 调用次数，决定文档规模。</li>
+<li>验收：能回答一个需要跨文档聚合的问题，并说明为什么向量检索答不了。</li>
+</ul>
+<h3 id="day-53-15h-graphrag">Day 53 · 周四 · 1.5h ｜ GraphRAG 的边界<a class="headerlink" href="#day-53-15h-graphrag" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：对比 GraphRAG 和基线在 20 题上的表现与成本。</li>
+<li>知识点：增量更新困难；实体消歧；摘要漂移；适用场景，多跳、聚合、关系型问题。</li>
+<li>材料：<a href="https://arxiv.org/abs/2404.16130">GraphRAG §4 评估与成本讨论</a>。</li>
+<li>方法：算总账，索引成本加查询成本加维护成本，和收益对比。</li>
+<li>验收：能给出什么条件下值得上 GraphRAG 的判断清单。</li>
+</ul>
+<h3 id="day-54-15h-vs-rag">Day 54 · 周五 · 1.5h ｜ 长上下文 vs RAG<a class="headerlink" href="#day-54-15h-vs-rag" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：同一批文档，对比全塞进上下文和走 RAG 的成本与质量。</li>
+<li>知识点：token 线性成本；注意力衰减与位置效应；prompt 缓存；文档集合稳定且小的时候才适合全塞。</li>
+<li>材料：<a href="https://arxiv.org/abs/2307.03172">Lost in the Middle 结论</a>；模型厂商的上下文缓存定价页。</li>
+<li>方法：成本曲线。文档量 1、10、100 份各测一次，找交叉点。</li>
+<li>验收：能画出文档量与成本的交叉图，给出决策规则。</li>
+</ul>
+<h3 id="day-55-2h-demo">Day 55 · 周六 · 2h ｜ 进阶 demo + 基线对比<a class="headerlink" href="#day-55-2h-demo" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：选一个方向（Agentic 或 GraphRAG）做成可运行 demo，跑 100 题对比。</li>
+<li>方法：只报相对基线的增量，不重复报基线本身。</li>
+<li>验收：demo 可复现；对比表含质量、延迟、成本三列。</li>
+</ul>
+<h3 id="day-56-25h">Day 56 · 周日 · 2.5h ｜ 总复盘与作品集<a class="headerlink" href="#day-56-25h" title="Permanent link">&para;</a></h3>
+<ul>
+<li>任务：整理 P0–P5 产出、指标对比、架构图，写成 3 页作品集。</li>
+<li>知识点：怎么讲清我解决了什么问题、用了什么方法、量化结果如何；失败实验也是资产。</li>
+<li>方法：STAR 结构，情境、任务、行动、结果，每条控制在 5 行内。</li>
+<li>验收：一个没做过 RAG 的人看完能复述你的方案和结论。</li>
+</ul>
+<hr />
+<h2 id="weekly-reviewmd">十一、每周复盘模板（复制到 <code>weekly-review.md</code>）<a class="headerlink" href="#weekly-reviewmd" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="gu">## 第 N 周（日期）</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">-</span><span class="w"> </span>本周假设：
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">-</span><span class="w"> </span>实际结果（数字）：
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">-</span><span class="w"> </span>差距与原因：
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">-</span><span class="w"> </span>本周最大的认知修正：
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="k">-</span><span class="w"> </span>下周唯一要验证的假设：
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="k">-</span><span class="w"> </span>欠账（明确取舍，不遮掩）：
+</code></pre></div>
+<hr />
+<h2 id="_5">十二、落后了怎么办（优先级排序）<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>时间不够时，按这个顺序砍：</p>
+<ol>
+<li>保住：Day 5（naive RAG）、Day 14（评测集）、Day 27/34（A/B）、Day 41（CI）、Day 44（越权测试）。</li>
+<li>可压缩：Day 24（ColBERT）、Day 30（LLM rerank）、Day 45（多租户细节）、Day 52–53（GraphRAG）。</li>
+<li>可跳过：Day 47（部署细节）、Day 51（工具化），知道概念即可。</li>
+</ol>
+<p>铁律：可以少做实验，但不能没有评测集。没有评测集的 8 周，等于 8 天。</p>
+<hr />
+<h2 id="_6">十三、每日打卡表（打印用）<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>周</th>
+<th>一</th>
+<th>二</th>
+<th>三</th>
+<th>四</th>
+<th>五</th>
+<th>六</th>
+<th>日</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>D1</td>
+<td>D2</td>
+<td>D3</td>
+<td>D4</td>
+<td>D5</td>
+<td>D6</td>
+<td>D7</td>
+</tr>
+<tr>
+<td>2</td>
+<td>D8</td>
+<td>D9</td>
+<td>D10</td>
+<td>D11</td>
+<td>D12</td>
+<td>D13</td>
+<td>D14</td>
+</tr>
+<tr>
+<td>3</td>
+<td>D15</td>
+<td>D16</td>
+<td>D17</td>
+<td>D18</td>
+<td>D19</td>
+<td>D20</td>
+<td>D21</td>
+</tr>
+<tr>
+<td>4</td>
+<td>D22</td>
+<td>D23</td>
+<td>D24</td>
+<td>D25</td>
+<td>D26</td>
+<td>D27</td>
+<td>D28</td>
+</tr>
+<tr>
+<td>5</td>
+<td>D29</td>
+<td>D30</td>
+<td>D31</td>
+<td>D32</td>
+<td>D33</td>
+<td>D34</td>
+<td>D35</td>
+</tr>
+<tr>
+<td>6</td>
+<td>D36</td>
+<td>D37</td>
+<td>D38</td>
+<td>D39</td>
+<td>D40</td>
+<td>D41</td>
+<td>D42</td>
+</tr>
+<tr>
+<td>7</td>
+<td>D43</td>
+<td>D44</td>
+<td>D45</td>
+<td>D46</td>
+<td>D47</td>
+<td>D48</td>
+<td>D49</td>
+</tr>
+<tr>
+<td>8</td>
+<td>D50</td>
+<td>D51</td>
+<td>D52</td>
+<td>D53</td>
+<td>D54</td>
+<td>D55</td>
+<td>D56</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>

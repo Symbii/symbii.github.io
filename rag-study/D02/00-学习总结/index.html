@@ -1,0 +1,1995 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="学习笔记与工程记录">
+      
+      
+        <meta name="author" content="Void_Liao">
+      
+      
+        <link rel="canonical" href="https://symbii.github.io/rag-study/D02/00-%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">
+      
+      
+        <link rel="prev" href="../00-%E4%BB%8A%E6%97%A5%E6%A6%82%E8%A7%88/">
+      
+      
+        <link rel="next" href="../../RAG%E5%BC%95%E6%93%8E%E5%AD%A6%E4%B9%A0%E5%9C%B0%E5%9B%BE/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>D02 · 学习总结 - Void_Liao 的博客</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#d02" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="Void_Liao 的博客" class="md-header__button md-logo" aria-label="Void_Liao 的博客" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Void_Liao 的博客
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              D02 · 学习总结
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切到深色"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切到深色" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切到浅色"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切到浅色" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Void_Liao 的博客" class="md-nav__button md-logo" aria-label="Void_Liao 的博客" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Void_Liao 的博客
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG 学习 56 天
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RAG 学习 56 天
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    复习
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    复习
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../D00/00-%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    复习总结
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    D01 · 2026-11-23
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    D01 · 2026-11-23
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../D01/00-%E4%BB%8A%E6%97%A5%E6%A6%82%E8%A7%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    今日概览
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../D01/01-%E9%93%BE%E8%B7%AF%E5%9B%BE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    链路图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../D01/02-%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    论文精读
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../D01/03-%E6%BA%90%E7%A0%81%E5%AF%B9%E7%85%A7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    源码对照
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../D01/04-%E5%A4%8D%E8%BF%B0%E4%B8%8E%E5%8D%A1%E7%82%B9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    复述与卡点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../D01/05-%E6%9C%AF%E8%AF%AD%E6%BE%84%E6%B8%85-%E7%A8%A0%E5%AF%86%E5%90%91%E9%87%8F%E7%B4%A2%E5%BC%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    术语澄清-稠密向量索引
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../D01/06-%E6%89%93%E5%8D%A1%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    打卡总结
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../D01/07-%E5%85%AB%E7%8E%AF%E9%BB%98%E5%86%99/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    八环默写
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../D01/08-%E9%93%BE%E8%B7%AF%E5%9B%BE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    链路图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    D02 · 2026-11-27
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    D02 · 2026-11-27
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-%E4%BB%8A%E6%97%A5%E6%A6%82%E8%A7%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    今日概览
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    学习总结
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    学习总结
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        记录表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#q1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q1 · 归一化与内积排序
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#q2-1000-512" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q2 · 1000 条 × 512 维的两笔账
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#q3-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q3 · 全排序 vs 部分选择
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        今日复习结论
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2026-11-27-d02-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第三轮 · 2026-11-27 · D02 理论自测（3 题）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="第三轮 · 2026-11-27 · D02 理论自测（3 题）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q1 · 归一化与度量等价
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q2 · 相似 ≠ 相关
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q3-512" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q3 · 512 截断与稀释
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第三轮结论
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2026-11-27-sentence-bert-33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第四轮 · 2026-11-27 · Sentence-BERT §3（3 问）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="第四轮 · 2026-11-27 · Sentence-BERT §3（3 问）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        §3 要点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q1_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q1 · 共享权重与同一空间
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q2-triplet-margin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q2 · triplet 的 margin ε
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q3-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q3 · regression 在优化什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第四轮结论
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    参考
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    参考
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../RAG%E5%BC%95%E6%93%8E%E5%AD%A6%E4%B9%A0%E5%9C%B0%E5%9B%BE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG引擎学习地图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../RAG%E5%BC%95%E6%93%8E%E6%AF%8F%E6%97%A5%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG引擎每日学习计划
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../RAGFlow%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E5%9C%B0%E5%9B%BE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAGFlow源码学习地图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learning-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    learning-log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../experiments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    experiments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    论文
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    论文
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/RAG-Lewis2020-%E4%B8%AD%E8%8B%B1%E5%AF%B9%E7%85%A7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG-Lewis2020-中英对照
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    关于
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        记录表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#q1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q1 · 归一化与内积排序
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#q2-1000-512" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q2 · 1000 条 × 512 维的两笔账
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#q3-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q3 · 全排序 vs 部分选择
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        今日复习结论
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2026-11-27-d02-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第三轮 · 2026-11-27 · D02 理论自测（3 题）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="第三轮 · 2026-11-27 · D02 理论自测（3 题）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q1 · 归一化与度量等价
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q2 · 相似 ≠ 相关
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q3-512" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q3 · 512 截断与稀释
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第三轮结论
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2026-11-27-sentence-bert-33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第四轮 · 2026-11-27 · Sentence-BERT §3（3 问）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="第四轮 · 2026-11-27 · Sentence-BERT §3（3 问）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        §3 要点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q1_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q1 · 共享权重与同一空间
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q2-triplet-margin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q2 · triplet 的 margin ε
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q3-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q3 · regression 在优化什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第四轮结论
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="d02">D02 · 学习总结<a class="headerlink" href="#d02" title="Permanent link">&para;</a></h1>
+<h2 id="_1">记录表<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>题</th>
+<th>考点</th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q1</td>
+<td>cosine 为什么归一化 / 内积排序何时会变</td>
+<td>对，核心答对，补了一个条件</td>
+</tr>
+<tr>
+<td>Q2</td>
+<td>1000×512 的两笔账</td>
+<td>对，表达式与 FLOP 口径都对，字节数没换算</td>
+</tr>
+<tr>
+<td>Q3</td>
+<td><code>argsort</code> vs <code>argpartition</code></td>
+<td>半对，只记住 <code>O(n log n)</code> / <code>O(n)</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="q1">Q1 · 归一化与内积排序<a class="headerlink" href="#q1" title="Permanent link">&para;</a></h2>
+<p>问题：cosine 为什么要先归一化？不归一化直接用内积，排序结果在什么情况下会变？</p>
+<p>答案（原文）：</p>
+<blockquote>
+<p>因为如果不做归一化，排序结果会偏向于长向量。应 ab=|a||b|cos</p>
+</blockquote>
+<p>公式本身没错，<code>a·b = ‖a‖·‖b‖·cosθ</code>。也抓住了候选向量的模长 <code>‖b‖</code> 会干扰排序这个要点，查询的 <code>‖a‖</code> 对同一批候选是公共因子，不影响排序。漏掉的一半是，所有候选模长相等时，内积排序与 cosine 排序完全等价，所以内积一定错这个判断也不成立，取决于库里模长是否一致。</p>
+<p>再往下推一层，内积等于 <code>cos × ‖b‖</code>。某条候选只要 <code>‖b‖</code> 比对手大 <code>cos_对手 / cos_自己</code> 倍，就能在没归一化时反超。D01 的实测数字正好是例子，<code>苹果手机多少钱一台？</code> cos=0.8256，<code>苹果多少钱一斤？</code> cos=0.6556，后者只要 ‖b‖=1.3 就变成 0.8523 &gt; 0.8256。</p>
+<p>另外，bge 输出的向量本身已 L2 归一化，所以点积即 cosine。但这是模型的性质，不是数学必然，换模型必须重新确认。</p>
+<hr />
+<h2 id="q2-1000-512">Q2 · 1000 条 × 512 维的两笔账<a class="headerlink" href="#q2-1000-512" title="Permanent link">&para;</a></h2>
+<p>问题：1000 条 × 512 维，numpy 一次算完全部内积，内存实际要读多少字节？算多少 FLOP？</p>
+<p>口径：全对（<code>sim @ sim.T</code>，1000×1000 的分数矩阵），不是单查询检索。</p>
+<table>
+<thead>
+<tr>
+<th>账</th>
+<th>答案</th>
+<th>判定</th>
+<th>正确值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读字节</td>
+<td><code>1000 × 512 × 4</code>（B）</td>
+<td>表达式对</td>
+<td>2,048,000 B ≈ 1.95 MiB</td>
+</tr>
+<tr>
+<td>算力</td>
+<td>按 FLOP 算是 10.24 亿</td>
+<td>对</td>
+<td>5.12×10⁸ 次乘加 = 1.024×10⁹ FLOP</td>
+</tr>
+</tbody>
+</table>
+<p>算术强度：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>AI = FLOPs ÷ 从内存读的字节 = 1.024e9 / 2.048e6 ≈ 500 FLOP/B
+</code></pre></div>
+<p>判据：AI 高于平衡点（笔记本 ≈2、服务器 ≈5、GPU ≈20 FLOP/B）就是算力墙，低于就是带宽墙。</p>
+<p>同一个矩阵，AI 不是固定值，取决于读取方式。逐条流式扫描 ≈ 0.5 FLOP/B，走带宽墙；BLAS gemm 分块后 ≈ 500 FLOP/B，走算力墙。分块的意义不是少读，而是让每份数据在被逐出缓存前多干几倍的活。1000 条时 2 MB 整个落在 L3 里，所以是算力墙，D01 里 ANN 省带宽的结论在这个规模上失效。到 100 万条（2 GB）时，检索只算 <code>q @ S.T</code>，输入 2 GB、输出 1000 个数、零复用，2 GB ÷ 25 GB/s ≈ 80 ms，带宽墙。</p>
+<p>GPU 那问：AI 是算术强度，与人工智能无关。GPU 被选不是因为带宽高，而是算力/带宽比加并行度，A100 ≈ 19 TFLOP/s ÷ 2 TB/s ≈ 10 FLOP/B，与 CPU 全核同档。显存容量与显存带宽是两件事。RAG 三段对号入座：编码是高 AI，给 GPU；建索引是 1000×1000，CPU numpy 毫秒级；在线 top-k over 百万向量时 AI≈0.5，CPU + ANN 更优，索引搬进显存光 PCIe 就要 80 ms。</p>
+<hr />
+<h2 id="q3-vs">Q3 · 全排序 vs 部分选择<a class="headerlink" href="#q3-vs" title="Permanent link">&para;</a></h2>
+<p>问题：<code>np.argsort</code> 与 <code>np.argpartition</code> 差在哪？1000 条时可忽略，到什么量级必须换、为什么？</p>
+<p>当时答的是：「不知道这 2 个排序差别，但是我只是记住了时间复杂度，一个是 O(nlogn)，一个是 O(n)。」</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>np.argsort(scores)</code></th>
+<th><code>np.argpartition(scores, -k)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>产出</td>
+<td>全部 n 个下标，严格从大到小</td>
+<td>全部 n 个下标，但只有前 k 个是最大的这一点成立</td>
+</tr>
+<tr>
+<td>组内顺序</td>
+<td>有序</td>
+<td>前 k 内部、后 n−k 内部都乱序</td>
+</tr>
+<tr>
+<td>语义</td>
+<td>全序</td>
+<td>只保证第 k 名的分界线切对</td>
+</tr>
+<tr>
+<td>复杂度</td>
+<td><code>O(n log n)</code></td>
+<td><code>O(n)</code> 期望（快选）</td>
+</tr>
+</tbody>
+</table>
+<p>top-k 的标准写法是先粗筛再精排：<code>argpartition</code> 选出 k 个，再对这 k 个 <code>argsort</code>，总代价 <code>O(n) + O(k log k)</code>。</p>
+<p>坑在偏移量上。<code>argpartition(a, -k)[-k:]</code> 是最大的 k 个，写成 <code>(a, k)[:k]</code> 拿到的是最小的 k 个，不报错，只静默变差，所以 D02 代码要对 top-k 加断言。</p>
+<p>量级刻度记成三档：1000 条用 <code>argsort</code>，微秒级，别优化；10 万条以上换 <code>argpartition</code>；千万级且要低延迟就上 ANN。实测参考（n=500 万 float32）：<code>argsort</code> 约 300–700 ms，<code>argpartition</code> 约 15–40 ms，差 15–25 倍。</p>
+<blockquote>
+<p>500 万条只要 top-5，能不能不碰全部分数？</p>
+</blockquote>
+<p>要求精确就不能，下界是 <code>Ω(n)</code>，没看过的那条可能就是真正最大的，所以 <code>argpartition</code> 的 <code>O(n)</code> 已是理论最优档。允许近似就能，只碰 1%，这是所有向量索引存在的理由：IVF 聚类只探近的几个簇，PQ 把 512 维压成 64 字节查表，HNSW 在近邻图上 <code>O(log n)</code> 跳。</p>
+<p>精确 top-k 的在线下界是 Ω(n)，想突破只有两条路，预先建结构（索引），或者接受近似（召回率），没有第三条。这也是 D02 先手写暴力版的意义：知道基线（500 万条 ≈ 40 ms），D05–D06 学 HNSW 才看得出 <code>40 ms → 2 ms</code> 那 20 倍是买来的，不是算出来的。</p>
+<hr />
+<h2 id="_2">今日复习结论<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>3 题里 2 题答出（Q1、Q2 的两笔账与 FLOP 口径都对），Q3 只记住复杂度，机制与下界见上文讲解。</p>
+<p>两个可以立刻改的习惯。记复杂度要配一个具体场景（1000 条 vs 500 万条），否则记了也不会用，Q3 就是这个症状；算出表达式要换算成带单位的数（<code>1000×512×4</code> → 1.95 MiB），否则读多少字节和算多少 FLOP 在脑子里是一团的。</p>
+<h2 id="2026-11-27-d02-3">第三轮 · 2026-11-27 · D02 理论自测（3 题）<a class="headerlink" href="#2026-11-27-d02-3" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>题</th>
+<th>考点</th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q1</td>
+<td>归一化与内积/余弦排序</td>
+<td>半对，2.5/3：条件说窄了、数字没算</td>
+</tr>
+<tr>
+<td>Q2</td>
+<td>相似 ≠ 相关（提到 vs 讲透）</td>
+<td>半对，2/3：结论对、理由与环号缺</td>
+</tr>
+<tr>
+<td>Q3</td>
+<td>512 截断与稀释</td>
+<td>半对，2/3：切分侧会、检索侧不会</td>
+</tr>
+</tbody>
+</table>
+<h3 id="q1_1">Q1 · 归一化与度量等价<a class="headerlink" href="#q1_1" title="Permanent link">&para;</a></h3>
+<p>题：某模型输出未 L2 归一化（模长 3–12），索引用 <code>IndexFlatIP</code>，打算内积当余弦。①假设何时成立、在设定里成立吗？②A 余弦 0.62/模长 11、B 余弦 0.71/模长 4，内积与余弦两种排序？③最小改法？</p>
+<p>答案：①「索引里是原始向量，对原始向量和查询向量分别做归一化后才成立」；②「内积 A 在前，余弦 B 在前」；③「做归一化」。</p>
+<p>① 方向对，但条件说窄了。正解是 <code>a·b = ‖a‖·‖b‖·cos</code> 里同一 query 的 <code>‖a‖</code> 是公共因子、不影响排序；真正决定排序是否变样的是候选之间 <code>‖b‖</code> 是否相等。相等时内积排序与 cosine 排序完全等价，不要求都等于 1。归一化只是自动保证该条件的常规手段。本题设定里模长 3–12 浮动，条件不成立。</p>
+<p>② 两个结论都对，但没算数字：A = 0.62 × 11 = 6.82，B = 0.71 × 4 = 2.84，A 的模长大 2.75 倍把内积拉高 2.4 倍，于是内积 A 前、余弦 B 前。这两个数就是模长污染排序的全部证据。</p>
+<p>③ 对。操作上两处都要做，入库前（<code>embed</code> 返回前）与查询编码后，只做一处等于没做。</p>
+<h3 id="q2">Q2 · 相似 ≠ 相关<a class="headerlink" href="#q2" title="Permanent link">&para;</a></h3>
+<p>题：query「备份失败，日志报 <code>disk full</code> 怎么排查」；甲「<code>disk full</code> 是常见报错，本文不讨论」、乙「磁盘空间不足处置：停任务 → 清理 <code>/var/log/backup</code> → 剩余 &gt;20% 再重试」。①纯向量谁排前、为什么？②错在哪类、哪环产生、哪环补救？③只改一处，动 ⑥ 混 BM25 还是 ⑦ 加重排？指标怎么变？</p>
+<p>答案：①「纯向量检索段落甲排前面」（未给理由，说「你来解释」）；②「属于检索，调整 topk 大小，在 rerank 阶段补救」；③「B」。</p>
+<p>① 结论对，甲在前。</p>
+<p>② 有三点要收紧。先分是召回失败还是排序失败：乙在 top-k 内但排后面是排序失败，⑦ 能救；乙不在池内是召回失败，⑦ 救不了。调 top-k 本身是 ⑥ 的动作，不是补救；补救落在 ⑦。另外没给环号。正解是产生于 ⑥（根源在 ④ 学的是话题相似，但不换模型修不了），补救在 ⑦，⑥ 的 top-k 是缓解不是补救，且重排池要大于最终取用条数。</p>
+<p>③ 选 B 对，但理由才是重点。本例中乙与 query 字面零重合，BM25 会把满篇 <code>disk full</code> 的甲继续抬高、把乙压到 0 分，所以 A 在这个例子上是负资产；重排靠 token 级交互判回没回答，才对症。指标方面，<code>Recall@池大小</code> 不变，<code>Recall@最终k</code>、<code>MRR</code>、<code>nDCG@10</code>、<code>Precision@1</code> 升，延迟与成本也升，K 个候选各一次前向，比 bi-encoder 贵 100–1000×。</p>
+<h3 id="q3-512">Q3 · 512 截断与稀释<a class="headerlink" href="#q3-512" title="Permanent link">&para;</a></h3>
+<p>题：chunk 3000 字，<code>max_position_embeddings=512</code>，目标句在第 2000 字。①编码时怎样、报错吗、还能召回吗？②假设能吃 3000 字，压成一个向量还有什么问题（用平均解释）？③修法在哪一环、给切分侧与检索侧各一个做法？</p>
+<p>答案：①「不会报错发生截断，不会被召回」；②「丢失阅读顺序 丢失精确字面」；③「切分，切分时候将 3000 按 512 切分；检索侧方案不知道」。</p>
+<p>① 两个结论对。补三点。截断在 tokenizer 层，<code>models/bge-small-zh-v1.5/sentence_bert_config.json:2 "max_seq_length": 512</code>，<code>encode()</code> 默认 <code>truncation=True</code>，静默丢弃，不警告不抛异常。更危险的变体是被召回但不含答案：若前 512 token 也在讲备份，会因开头被召回，而正文里没有第 2000 字那句，生成模型拿到相关但无答案的上下文，典型反应是编。还有，512 是 token 数，代码、英文、数字比例更低，<code>/var/log/backup</code> 会拆成多个 token，3000 字可能只剩最前 1/10。</p>
+<p>② 两点都对，但没答到平均。池化是对整段加权平均，3000 字里占 10% 的具体规则（如剩余 &lt;20% 拒绝重试）在向量里权重极低、被抹平，向量只表达这段在讲备份的总则与流程，是话题级摘要，不是可精确匹配的答案。后果是 query 越具体越匹配不上，问主题好、问细节差，表现为检索看着还行、回答总差一点细节，根因是块太大、向量太平。反直觉的推论是块越大越平、越小越尖；检索要尖、生成要全，所以有父子块。</p>
+<p>③ 切分侧对，落在 ③。但只说按 512 切不够，还要按语义边界（标题、段落）切，加上相邻块重叠（overlap），并在切分时就建立子块到父块的指向关系。检索侧两个做法：父块回填（small-to-big / parent retrieval），索引小块做检索，chunk 表存 <code>parent_id</code>，命中后按 <code>parent_id</code> 取父块整节正文喂生成；邻块扩展（sentence-window），命中块加前后各 N 块一起拼进上下文。还有变体，用章节摘要建索引向量、正文只作上下文，摘要负责被搜到，正文负责被读懂。</p>
+<h3 id="_3">第三轮结论<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p>三题得分 Q1 2.5/3、Q2 2/3、Q3 2/3。结论几乎都对，理由与数字普遍缺，这是比答错更需要修的毛病：结论对说明记住了，理由缺说明没法迁移到新场景。</p>
+<p>六条要带走的东西：</p>
+<ol>
+<li>内积展开是 <code>a·b = ‖a‖·‖b‖·cos</code>。候选模长相等时，内积排序等于余弦排序；归一化只是保证这个条件的常规手段，而且入库与查询两处都要做，只做一处等于没做。</li>
+<li>稠密向量量的是话题像不像，不是回答没有。这是 ⑦ 重排存在的根本理由。</li>
+<li>效果不对时先分召回失败（目标在池外）还是排序失败（池内但靠后），再决定动 ⑥ 还是 ⑦。</li>
+<li>BM25 对同义改写是负资产。字面零重合时，融合会把话题匹配的噪声顶上去。</li>
+<li>512 是 token 上限，超了静默截断。真正的坑是被召回但不含答案，生成侧反倒要背锅。</li>
+<li>块越大向量越平。检索要尖，得用小块；生成要全，得用父块。</li>
+</ol>
+<h2 id="2026-11-27-sentence-bert-33">第四轮 · 2026-11-27 · Sentence-BERT §3（3 问）<a class="headerlink" href="#2026-11-27-sentence-bert-33" title="Permanent link">&para;</a></h2>
+<h3 id="3">§3 要点<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
+<p>结构、pooling、三个训练目标都在 §3 Model，§2 是 Related Work。</p>
+<ul>
+<li>pooling 三选一：CLS / MEAN / MAX，默认 MEAN。STS 平均分 MEAN 54.81、CLS 29.19，raw BERT 的 CLS 向量拿去比 cosine 基本不能看。</li>
+<li>Classification：<code>(u, v, |u−v|)</code> 拼接后过 <code>W_t ∈ ℝ^{3n×k}</code> 再 softmax，交叉熵训练，<code>W_t</code> 只在训练时存在。</li>
+<li>Regression：直接算 <code>cos(u, v)</code>，用 MSE 拟合人工相似度。</li>
+<li>Triplet：<code>max(‖s_a−s_p‖ − ‖s_a−s_n‖ + ε, 0)</code>，欧氏距离，<code>ε=1</code>。</li>
+<li>3.1：SNLI 570k + MultiNLI 430k，3 类 softmax，1 epoch，batch 16，Adam lr 2e-5，warmup 前 10%。</li>
+<li>三个目标都围绕「用 cosine 比较句向量」来设计：regression 直接把 cos 当输出，triplet 用距离排序。所以这类模型产出的向量本来就适合余弦比较，归一化后内积等于余弦不是巧合。</li>
+</ul>
+<h3 id="q1_2">Q1 · 共享权重与同一空间<a class="headerlink" href="#q1_2" title="Permanent link">&para;</a></h3>
+<p>题：siamese 结构的「共享权重」共享的到底是什么，为什么它能让两句话进同一个向量空间？</p>
+<p>答案（原文）：</p>
+<blockquote>
+<p>共享指的是同一套参数，所以工程实践上用同一套embedding模型 这也就是为什么能让不同的话进入同一个向量空间</p>
+</blockquote>
+<p>共享的是同一套参数，也就是同一个函数 <code>f</code>，<code>f(a)</code> 和 <code>f(b)</code> 自然落在同一个 <code>ℝⁿ</code> 里。换成两个不同的模型，各自输出各自的空间，两边的余弦没有可比性。</p>
+<p>实际落地时条件还要紧一档：版本、pool 策略、归一化方式都得一致，否则就是同一个模型的两个不同函数。索引端和查询端四样缺一不可。</p>
+<h3 id="q2-triplet-margin">Q2 · triplet 的 margin ε<a class="headerlink" href="#q2-triplet-margin" title="Permanent link">&para;</a></h3>
+<p>题：为什么 triplet 损失里要有 margin ε，去掉会怎样？</p>
+<p>答案（原文）：</p>
+<blockquote>
+<p>如果没有这个，会导致所有数据全部杂糅一起，分辨不清</p>
+</blockquote>
+<p>方向对。没有 ε，模型只要让正例勉强比负例近一点点就能把损失压到 0，学到的是很弱的分辨。</p>
+<p>可以落到具体机制上：ε 在 <code>max(·, 0)</code> 里面，<code>d(a,p)</code> 和 <code>d(a,n)</code> 相等时损失是 ε 不是 0，还有梯度往下压；去掉 ε，全塌缩（所有向量挤在一起、两个距离都是 0）恰好让 <code>loss=0</code>，成了一个合法的解。ε 就是把这条路堵掉的。</p>
+<h3 id="q3-regression">Q3 · regression 在优化什么<a class="headerlink" href="#q3-regression" title="Permanent link">&para;</a></h3>
+<p>题：regression 目标直接拿 cos 当预测值，模型在优化什么？</p>
+<p>答案（原文）：</p>
+<blockquote>
+<p>余弦相似度就是夹角，描述两个向量像不像，优化的就是这个 cos 值逼近人工审核</p>
+</blockquote>
+<p>对。优化的是 cos 和人工标注分数之间的差（MSE），不是把相似句都压到 1。</p>
+<p>有一处要分清：被优化的是编码器 <code>f</code> 的参数，<code>cos</code> 只是损失里的读出层。梯度从 cos 与标注的误差出发，最后落到 BERT 的权重上，改的是整个向量空间。</p>
+<h3 id="_4">第四轮结论<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>三问都在点上，缺的都是机制那一句：Q1 缺函数视角，Q2 缺塌缩为什么不是最优，Q3 缺被优化的到底是谁。</p>
+<p>三条带走：</p>
+<ol>
+<li>共享权重就是同一个函数。索引端和查询端要同模型、同版本、同 pool、同归一化，缺一样就是两个函数，cosine 失去意义。</li>
+<li>margin ε 是把塌缩从最优解里排除掉，不是「让差距更大」这种说法。</li>
+<li>训练目标里的 cos 是读出层，真正被优化的是编码器参数。这也是「归一化后内积等于余弦」成立的原因。</li>
+</ol>
+<p>第二轮（D01 综合题）的复习记录在 <a href="../../D00/00-%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93/">D00 · 复习总结</a>。</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy", "toc.follow"], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,2356 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="学习笔记与工程记录">
+      
+      
+        <meta name="author" content="Void_Liao">
+      
+      
+        <link rel="canonical" href="https://symbii.github.io/rag-study/RAGFlow%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E5%9C%B0%E5%9B%BE/">
+      
+      
+        <link rel="prev" href="../RAG%E5%BC%95%E6%93%8E%E6%AF%8F%E6%97%A5%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/">
+      
+      
+        <link rel="next" href="../learning-log/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>RAGFlow 源码学习地图（配 56 天计划） - Void_Liao 的博客</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ragflow-56" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Void_Liao 的博客" class="md-header__button md-logo" aria-label="Void_Liao 的博客" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Void_Liao 的博客
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              RAGFlow 源码学习地图（配 56 天计划）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切到深色"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切到深色" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切到浅色"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切到浅色" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Void_Liao 的博客" class="md-nav__button md-logo" aria-label="Void_Liao 的博客" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Void_Liao 的博客
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG 学习 56 天
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RAG 学习 56 天
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    复习
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    复习
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D00/00-%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    复习总结
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    D01 · 2026-11-23
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    D01 · 2026-11-23
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/00-%E4%BB%8A%E6%97%A5%E6%A6%82%E8%A7%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    今日概览
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/01-%E9%93%BE%E8%B7%AF%E5%9B%BE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    链路图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/02-%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    论文精读
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/03-%E6%BA%90%E7%A0%81%E5%AF%B9%E7%85%A7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    源码对照
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/04-%E5%A4%8D%E8%BF%B0%E4%B8%8E%E5%8D%A1%E7%82%B9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    复述与卡点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/05-%E6%9C%AF%E8%AF%AD%E6%BE%84%E6%B8%85-%E7%A8%A0%E5%AF%86%E5%90%91%E9%87%8F%E7%B4%A2%E5%BC%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    术语澄清-稠密向量索引
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/06-%E6%89%93%E5%8D%A1%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    打卡总结
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/07-%E5%85%AB%E7%8E%AF%E9%BB%98%E5%86%99/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    八环默写
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01/08-%E9%93%BE%E8%B7%AF%E5%9B%BE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    链路图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    D02 · 2026-11-27
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    D02 · 2026-11-27
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D02/00-%E4%BB%8A%E6%97%A5%E6%A6%82%E8%A7%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    今日概览
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D02/00-%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    学习总结
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    参考
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    参考
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../RAG%E5%BC%95%E6%93%8E%E5%AD%A6%E4%B9%A0%E5%9C%B0%E5%9B%BE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG引擎学习地图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../RAG%E5%BC%95%E6%93%8E%E6%AF%8F%E6%97%A5%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG引擎每日学习计划
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAGFlow源码学习地图
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAGFlow源码学习地图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 为什么读这个版本
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 五分钟建立代码地图
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 读源码的三层法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 每周对应源码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-56" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 每日锚点（56 天）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 每日锚点（56 天）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 1 周
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 2 周
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 3 周
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 4 周
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 5 周
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 6 周
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 7 周
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 8 周
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-40" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 五个必读片段（信息密度最高，合计 40 分钟）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 一条规则：源码只用来验证，不用来学概念
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 与每日计划的衔接
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 版本提示
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../learning-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    learning-log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../experiments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    experiments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    论文
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    论文
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../papers/RAG-Lewis2020-%E4%B8%AD%E8%8B%B1%E5%AF%B9%E7%85%A7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG-Lewis2020-中英对照
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    关于
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 为什么读这个版本
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 五分钟建立代码地图
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 读源码的三层法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 每周对应源码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-56" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 每日锚点（56 天）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 每日锚点（56 天）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 1 周
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 2 周
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 3 周
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 4 周
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 5 周
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 6 周
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 7 周
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第 8 周
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-40" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 五个必读片段（信息密度最高，合计 40 分钟）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 一条规则：源码只用来验证，不用来学概念
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 与每日计划的衔接
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 版本提示
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="ragflow-56">RAGFlow 源码学习地图（配 56 天计划）<a class="headerlink" href="#ragflow-56" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>配读文档：<a href="../RAG%E5%BC%95%E6%93%8E%E5%AD%A6%E4%B9%A0%E5%9C%B0%E5%9B%BE/">RAG 引擎学习地图</a> · <a href="../RAG%E5%BC%95%E6%93%8E%E6%AF%8F%E6%97%A5%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/">RAG 引擎每日学习计划</a>
+源码位置：<code>third_party/ragflow-0.27.3</code>（已 gitignore，不进版本库）
+版本：v0.27.3，RAGFlow 最后一条 Python 主线</p>
+</blockquote>
+<h2 id="0">0. 为什么读这个版本<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<p>RAGFlow 上游主线已到 v1.0.0，整仓用 Go 重写（<code>internal/deepdoc</code>、<code>internal/engine</code>、<code>cmd/</code>）。理念没变，但代码从一个 Python 文件里的函数变成了跨包的接口实现，对第一次读 RAG 源码的人来说噪声太大。</p>
+<p>v0.27.3 还是完整的 Python 实现，<code>rag/</code> 加 <code>deepdoc/</code> 两层结构，一个函数 30 行内能读完，适合拿来对照自己手写的 naive RAG。等 8 周跑完、想看成产级实现时，再切到 1.0 的 Go 版对照不迟。</p>
+<p>拉取方式（已执行，需要重拉时用）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">git</span> <span class="n">clone</span> <span class="p">-</span><span class="n">-depth</span> <span class="n">1</span> <span class="p">-</span><span class="n">-branch</span> <span class="n">v0</span><span class="p">.</span><span class="n">27</span><span class="p">.</span><span class="n">3</span> <span class="p">-</span><span class="n">-filter</span><span class="p">=</span><span class="n">blob</span><span class="p">:</span><span class="n">none</span> <span class="p">-</span><span class="n">-sparse</span> <span class="n">https</span><span class="p">://</span><span class="n">gitee</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">infiniflow</span><span class="p">/</span><span class="n">ragflow</span><span class="p">.</span><span class="n">git</span> <span class="n">third_party</span><span class="p">/</span><span class="n">ragflow</span><span class="p">-</span><span class="n">0</span><span class="p">.</span><span class="n">27</span><span class="p">.</span><span class="n">3</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">git</span> <span class="n">-C</span> <span class="n">third_party</span><span class="p">/</span><span class="n">ragflow</span><span class="p">-</span><span class="n">0</span><span class="p">.</span><span class="n">27</span><span class="p">.</span><span class="n">3</span> <span class="n">sparse-checkout</span> <span class="nb">set </span><span class="p">-</span><span class="n">-no-cone</span> <span class="p">/</span><span class="n">rag</span><span class="p">/</span> <span class="p">/</span><span class="n">deepdoc</span><span class="p">/</span> <span class="p">/</span><span class="n">api</span><span class="p">/</span> <span class="p">/</span><span class="n">agent</span><span class="p">/</span> <span class="p">/</span><span class="n">mcp</span><span class="p">/</span> <span class="p">/</span><span class="n">conf</span><span class="p">/</span> <span class="p">/</span><span class="n">docker</span><span class="p">/</span> <span class="p">/</span><span class="n">pyproject</span><span class="p">.</span><span class="n">toml</span> <span class="p">/</span><span class="n">README</span><span class="p">.</span><span class="nb">md</span>
+</code></pre></div>
+<p>本仓总量 15.3 MB，<code>rag/</code> 251 个文件，<code>deepdoc/</code> 65 个，<code>api/</code> 164 个，<code>agent/</code> 159 个。</p>
+<h2 id="1">1. 五分钟建立代码地图<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>RAGFlow 只有两条链路，其余都是外围。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>写入链路（离线，一次）
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  文件 → 解析 deepdoc/parser/* → 版面/表格/OCR deepdoc/vision/*
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>       → 切分 rag/app/naive.py:chunk() → 向量化 rag/llm/embedding_model.py
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>       → 入库 rag/utils/*_conn.py
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  调度者：rag/svr/task_executor.py:do_handle_task()
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>查询链路（在线，每次）
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  question → 改写/分析 rag/nlp/query.py:question()
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>           → 混合检索 rag/nlp/search.py:search()  (BM25 + kNN)
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>           → 融合排序 rag/nlp/search.py:retrieval()  (rerank_by_model)
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>           → 拼上下文 rag/prompts/generator.py:kb_prompt()
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>           → 生成 + 引用 generator.py:citation_prompt() / search.py:insert_citations()
+</code></pre></div>
+<p>对应 D01 要画的 8 环链路图：解析（deepdoc）、切分（naive.chunk）、编码（embedding_model）、索引（*_conn）、查询理解（query.question）、召回（search.search）、重排（search.retrieval）、组装加生成（generator）。RAGFlow 把解析看得极重，<code>deepdoc/</code> 占了 65 个文件，这是它与论文版 RAG 最大的差别。</p>
+<h2 id="2">2. 读源码的三层法<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p>第一层看调用链，30 分钟，只读签名。在整仓 grep 概念词，把谁调用谁画出来，不读函数体。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">Select-String</span> <span class="n">-Path</span> <span class="n">third_party</span><span class="p">/</span><span class="n">ragflow</span><span class="p">-</span><span class="n">0</span><span class="p">.</span><span class="n">27</span><span class="p">.</span><span class="n">3</span><span class="p">/</span><span class="n">rag</span><span class="p">/*/*.</span><span class="n">py</span> <span class="n">-Pattern</span> <span class="s1">'def retrieval|def chunk|def search'</span>
+</code></pre></div>
+<p>第二层读单函数，每天 15–25 分钟。只读当天锚点那一个函数，读到能回答输入什么、输出什么、中间改了哪三个字段，其它一律跳过。</p>
+<p>第三层找反例，每周一次。读完问一句它在什么情况下会错。RAGFlow 的注释和 <code>try/except</code> 里常藏着工程妥协，比如 <code>_is_garbled_text</code>、<code>min_match</code>，那才是真实世界的信号。</p>
+<p>不要做的事：不要从 <code>api/</code> 开始读，全是参数校验；不要通读 <code>rag/app/naive.py</code>（66 KB）；不要读 <code>rag/utils/*_conn.py</code> 全量，十几个向量库适配器，选一个读即可。</p>
+<h2 id="3">3. 每周对应源码<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>周</th>
+<th>主题</th>
+<th>主要源码区</th>
+<th>读它的目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>W1</td>
+<td>基础底座 + 朴素 RAG</td>
+<td><code>rag/svr/task_executor.py</code>、<code>rag/nlp/search.py</code>、<code>rag/app/naive.py</code></td>
+<td>把论文里的两段式落到两条真实链路上</td>
+</tr>
+<tr>
+<td>W2</td>
+<td>解析攻坚</td>
+<td><code>deepdoc/parser/</code>、<code>deepdoc/vision/</code></td>
+<td>看工业级解析怎么处理双栏/表格/扫描件</td>
+</tr>
+<tr>
+<td>W3</td>
+<td>切分与索引</td>
+<td><code>rag/app/naive.py</code>、<code>rag/nlp/__init__.py</code>、<code>rag/utils/es_conn.py</code></td>
+<td>切分参数如何影响检索，索引怎么建</td>
+</tr>
+<tr>
+<td>W4</td>
+<td>混合召回</td>
+<td><code>rag/nlp/query.py</code>、<code>rag/nlp/search.py</code>、<code>rag/graphrag/search.py</code></td>
+<td>向量+BM25 融合的真实权重与失效点</td>
+</tr>
+<tr>
+<td>W5</td>
+<td>重排与组装</td>
+<td><code>rag/nlp/search.py</code>、<code>rag/llm/rerank_model.py</code>、<code>rag/prompts/generator.py</code></td>
+<td>重排怎么接、上下文怎么裁、引用怎么对齐</td>
+</tr>
+<tr>
+<td>W6</td>
+<td>生成与评测</td>
+<td><code>rag/prompts/generator.py</code>、<code>rag/benchmark.py</code>、<code>rag/prompts/sufficiency_check.md</code></td>
+<td>拒答/忠实/评测闭环的工程写法</td>
+</tr>
+<tr>
+<td>W7</td>
+<td>工程化</td>
+<td><code>api/apps/</code>、<code>rag/nlp/search.py:get_filters</code>、<code>rag/utils/es_conn.py</code></td>
+<td>权限过滤下推、多租户、增量同步</td>
+</tr>
+<tr>
+<td>W8</td>
+<td>进阶</td>
+<td><code>rag/advanced_rag/</code>、<code>rag/graphrag/</code>、<code>agent/tools/retrieval.py</code></td>
+<td>Agentic RAG 与 GraphRAG 的真实形态</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-56">4. 每日锚点（56 天）<a class="headerlink" href="#4-56" title="Permanent link">&para;</a></h2>
+<p>行号对应 v0.27.3，读之前先 <code>git -C third_party/ragflow-0.27.3 log -1</code> 确认版本；换版本后行号会漂，用函数名 grep。</p>
+<h3 id="1_1">第 1 周<a class="headerlink" href="#1_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>主题</th>
+<th>锚点</th>
+<th>看什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D01</td>
+<td>RAG 解决什么问题</td>
+<td><code>rag/svr/task_executor.py:1449 do_handle_task</code>；<code>rag/nlp/search.py:717 retrieval</code></td>
+<td>两条链路各几步，8 环分别落在哪个函数</td>
+</tr>
+<tr>
+<td>D02</td>
+<td>Embedding 与相似度</td>
+<td><code>rag/llm/embedding_model.py:225 BuiltinEmbed</code>、<code>:245 encode</code>；<code>rag/nlp/search.py:714 hybrid_similarity</code></td>
+<td>归一化在哪做；为什么检索分数是 token 分与向量分的加权</td>
+</tr>
+<tr>
+<td>D03</td>
+<td>HNSW</td>
+<td><code>rag/svr/task_executor.py:744 init_kb</code>（只调 <code>create_idx</code>）；<code>rag/utils/vastbase_conn.py:482</code> 的 <code>m=16, ef_construction=50</code>；<code>rag/utils/es_conn.py:198 search</code></td>
+<td>大多数后端把 HNSW 参数交给引擎默认值，只有自己建图的实现才写死参数；kNN 的 <code>knn_top_k</code>/<code>knn_num_candidates</code> 怎么下发</td>
+</tr>
+<tr>
+<td>D04</td>
+<td>BM25</td>
+<td><code>rag/nlp/query.py:42 question</code>；<code>rag/nlp/term_weight.py</code>；<code>rag/nlp/__init__.py:423 tokenize</code></td>
+<td>中文 query 怎么变成 term 权重，专有名词怎么保</td>
+</tr>
+<tr>
+<td>D05</td>
+<td>手写 naive RAG</td>
+<td><code>rag/app/naive.py:1123 chunk</code></td>
+<td>切分的输入输出字段（<code>content_with_weight</code>、<code>content_ltks</code>、<code>docnm_kwd</code>…），对照你的 100 行</td>
+</tr>
+<tr>
+<td>D06</td>
+<td>误差分析</td>
+<td><code>rag/nlp/search.py:431 insert_citations</code>；<code>:242 get_filters</code></td>
+<td>引用对不上会怎样；过滤条件写错会静默返回空</td>
+</tr>
+<tr>
+<td>D07</td>
+<td>周复盘</td>
+<td><code>rag/flow/pipeline.py</code>；<code>rag/svr/task_executor_refactor/</code></td>
+<td>工程化如何把一个函数拆成可重试的阶段</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2_1">第 2 周<a class="headerlink" href="#2_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>主题</th>
+<th>锚点</th>
+<th>看什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D08</td>
+<td>PDF 文本层</td>
+<td><code>deepdoc/parser/pdf_parser.py:56 RAGFlowPdfParser</code>、<code>:1633 __images__</code></td>
+<td>它怎么把 char 级内容重组成行和块</td>
+</tr>
+<tr>
+<td>D09</td>
+<td>双栏与阅读顺序</td>
+<td><code>pdf_parser.py:905 _assign_column</code>、<code>:989 _text_merge</code>、<code>:1108 _final_reading_order_merge</code></td>
+<td>栏检测、纵向合并、最终排序三段逻辑</td>
+</tr>
+<tr>
+<td>D10</td>
+<td>表格抽取</td>
+<td><code>pdf_parser.py:1307 _extract_table_figure</code>；<code>deepdoc/vision/table_structure_recognizer.py</code>；<code>rag/app/table.py</code></td>
+<td>有线/无线表怎么分流，表格怎么转 Markdown</td>
+</tr>
+<tr>
+<td>D11</td>
+<td>扫描件 OCR</td>
+<td><code>pdf_parser.py:789 __ocr</code>；<code>deepdoc/vision/ocr.py</code>；<code>layout_recognizer.py</code></td>
+<td>det/rec/cls 三阶段的封装，版面识别输出什么</td>
+</tr>
+<tr>
+<td>D12</td>
+<td>其它格式</td>
+<td><code>deepdoc/parser/docx_parser.py</code>、<code>excel_parser.py</code>、<code>html_parser.py</code>、<code>markdown_parser.py</code></td>
+<td>每种格式的结构信号从哪来</td>
+</tr>
+<tr>
+<td>D13</td>
+<td>解析 pipeline 整合</td>
+<td><code>rag/app/naive.py:171 by_deepdoc</code>、<code>:1123 chunk</code>；<code>deepdoc/parser/__init__.py</code></td>
+<td>格式分派表 + 失败回退（<code>_is_garbled_text</code>）</td>
+</tr>
+<tr>
+<td>D14</td>
+<td>建 30 题评测集</td>
+<td><code>rag/benchmark.py</code></td>
+<td>它自带的评测脚本长什么样，指标怎么算</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3_1">第 3 周<a class="headerlink" href="#3_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>主题</th>
+<th>锚点</th>
+<th>看什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D15</td>
+<td>切分策略全景</td>
+<td><code>rag/app/naive.py:1123 chunk</code> 里的 <code>parser_config</code>；<code>rag/nlp/delim.py</code></td>
+<td><code>chunk_token_num</code>/<code>delimiter</code> 怎么传下去</td>
+</tr>
+<tr>
+<td>D16</td>
+<td>语义切分</td>
+<td><code>rag/nlp/__init__.py:371 bullets_category</code>、<code>:1241 title_frequency</code>、<code>:1271 tree_merge</code></td>
+<td>它用标题频率加符号来猜层级，而不是真语义</td>
+</tr>
+<tr>
+<td>D17</td>
+<td>结构化与父子块</td>
+<td><code>rag/nlp/search.py:1101 retrieval_by_children</code></td>
+<td>命中子块后怎么拉父块，代价是什么</td>
+</tr>
+<tr>
+<td>D18</td>
+<td>元数据与过滤</td>
+<td><code>rag/nlp/search.py:242 get_filters</code>；<code>rag/prompts/meta_filter.md</code></td>
+<td>过滤条件的 DSL 从自然语言怎么生成</td>
+</tr>
+<tr>
+<td>D19</td>
+<td>向量库选型</td>
+<td><code>rag/utils/es_conn.py</code> vs <code>infinity_conn.py</code> vs <code>ob_conn.py</code>；<code>rag/settings.py</code></td>
+<td>同一 <code>search()</code> 接口在不同后端的差异</td>
+</tr>
+<tr>
+<td>D20</td>
+<td>切分 A/B</td>
+<td><code>rag/benchmark.py</code></td>
+<td>怎么把 A/B 跑成可复现脚本</td>
+</tr>
+<tr>
+<td>D21</td>
+<td>周复盘</td>
+<td><code>rag/nlp/search.py:714 hybrid_similarity</code></td>
+<td>你的权重假设与它的默认值差多少</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4">第 4 周<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>主题</th>
+<th>锚点</th>
+<th>看什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D22</td>
+<td>向量检索失效边界</td>
+<td><code>rag/nlp/search.py:255 search</code>、<code>rag/nlp/query.py:42 question</code></td>
+<td><code>min_match</code> 的作用；query 太长/太短会怎样</td>
+</tr>
+<tr>
+<td>D23</td>
+<td>RRF 融合</td>
+<td><code>rag/nlp/search.py:39 build_fusion_expr</code></td>
+<td>它用的是加权融合还是 RRF，<code>vector_similarity_weight</code> 默认值</td>
+</tr>
+<tr>
+<td>D24</td>
+<td>多向量与迟交互</td>
+<td><code>rag/llm/rerank_model.py:62 similarity</code></td>
+<td>RAGFlow 用 cross-encoder 重排替代迟交互，边界在哪</td>
+</tr>
+<tr>
+<td>D25</td>
+<td>Query 改写</td>
+<td><code>rag/nlp/query.py</code>；<code>rag/prompts/multi_queries_gen.md</code>；<code>rag/prompts/sca_query_rewrite.md</code></td>
+<td>多查询生成与改写提示词的写法</td>
+</tr>
+<tr>
+<td>D26</td>
+<td>子问题拆解与路由</td>
+<td><code>rag/graphrag/search.py:139 retrieval</code>；<code>rag/advanced_rag/agentic_rag.py</code></td>
+<td>复杂问题怎么被拆成多次检索</td>
+</tr>
+<tr>
+<td>D27</td>
+<td>混合召回 A/B</td>
+<td><code>rag/nlp/search.py:717 retrieval</code></td>
+<td>融合权重怎么进到最终排序</td>
+</tr>
+<tr>
+<td>D28</td>
+<td>周复盘</td>
+<td>召回漏斗相关日志字段</td>
+<td>每级召回数量从哪打点</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5">第 5 周<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>主题</th>
+<th>锚点</th>
+<th>看什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D29</td>
+<td>Cross-encoder 重排</td>
+<td><code>rag/nlp/search.py:673 rerank_by_model</code>；<code>rag/llm/rerank_model.py</code></td>
+<td>重排分数怎么与召回分数合成</td>
+</tr>
+<tr>
+<td>D30</td>
+<td>LLM 重排与成本</td>
+<td><code>rerank_model.py:58 Base</code>（<code>max_token</code>、批处理）</td>
+<td>一次重排的 token 预算怎么控制</td>
+</tr>
+<tr>
+<td>D31</td>
+<td>预过滤 vs 后过滤</td>
+<td><code>rag/nlp/search.py:242 get_filters</code>；<code>rag/utils/es_conn.py:75 _build_knn_filter_query</code></td>
+<td>过滤条件如何进 kNN 的 filter；<code>vector_similarity_weight</code> 低于阈值时会剥掉 <code>query_string</code> 子句（性能妥协）</td>
+</tr>
+<tr>
+<td>D32</td>
+<td>上下文组装</td>
+<td><code>rag/prompts/generator.py:168 kb_prompt</code>、<code>:69 message_fit_in</code></td>
+<td>超预算时先丢谁；顺序怎么排</td>
+</tr>
+<tr>
+<td>D33</td>
+<td>引用与可追溯</td>
+<td><code>generator.py:41 chunks_format</code>、<code>:226 citation_prompt</code>；<code>search.py:431 insert_citations</code></td>
+<td>引用编号从哪来、怎么回填到答案</td>
+</tr>
+<tr>
+<td>D34</td>
+<td>端到端 A/B</td>
+<td><code>rag/benchmark.py</code> + 你的对比脚本</td>
+<td>质量/延迟/成本三个量怎么一起记</td>
+</tr>
+<tr>
+<td>D35</td>
+<td>周复盘</td>
+<td><code>rag/prompts/generator.py</code></td>
+<td>提示词工程在真实系统里的分量</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6">第 6 周<a class="headerlink" href="#6" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>主题</th>
+<th>锚点</th>
+<th>看什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D36</td>
+<td>Grounded Generation</td>
+<td><code>rag/prompts/generator.py</code>（system prompt 拼装）、<code>rag/prompts/citation_prompt.md</code></td>
+<td>怎么约束只能用给定材料</td>
+</tr>
+<tr>
+<td>D37</td>
+<td>拒答与不确定</td>
+<td><code>generator.py:575 _is_llm_error_answer</code>；<code>rag/prompts/sufficiency_check.md</code></td>
+<td>它靠什么判断材料不够</td>
+</tr>
+<tr>
+<td>D38</td>
+<td>多轮对话</td>
+<td><code>generator.py:188 memory_prompt</code>、<code>:427 form_history</code></td>
+<td>历史怎么截断、怎么与检索结果共存</td>
+</tr>
+<tr>
+<td>D39</td>
+<td>评测指标与 RAGAS</td>
+<td><code>rag/benchmark.py</code>；<code>rag/prompts/structured_output_prompt.md</code></td>
+<td>结构化输出如何让 judge 可解析</td>
+</tr>
+<tr>
+<td>D40</td>
+<td>100 题 + judge 校准</td>
+<td><code>rag/benchmark.py</code></td>
+<td>批量评测的执行方式</td>
+</tr>
+<tr>
+<td>D41</td>
+<td>CI 回归与 Trace</td>
+<td><code>api/apps/langfuse_api.py</code>；<code>rag/svr/task_executor.py:211 set_progress</code></td>
+<td>可观测性埋在哪</td>
+</tr>
+<tr>
+<td>D42</td>
+<td>周复盘</td>
+<td>归因报告模版 + 你自己的表</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<h3 id="7">第 7 周<a class="headerlink" href="#7" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>主题</th>
+<th>锚点</th>
+<th>看什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D43</td>
+<td>ACL 模型与权限同步</td>
+<td><code>api/db/</code> 中用户/租户表；<code>rag/nlp/search.py:242 get_filters</code></td>
+<td>权限落到检索条件上的方式</td>
+</tr>
+<tr>
+<td>D44</td>
+<td>过滤下推与越权测试</td>
+<td><code>rag/utils/es_conn.py:75 _build_knn_filter_query</code>、<code>:198 search</code></td>
+<td>kNN 与 bool filter 合并成一个查询；注意它会把 <code>query_string</code> 子句从 filter 里摘掉，越权测试要专门盯这条路径</td>
+</tr>
+<tr>
+<td>D45</td>
+<td>多租户隔离</td>
+<td><code>rag/nlp/search.py:49 index_name(uid)</code></td>
+<td>按租户分索引还是分字段，各自的代价</td>
+</tr>
+<tr>
+<td>D46</td>
+<td>增量同步与删除感知</td>
+<td><code>rag/svr/sync_data_source.py</code></td>
+<td>变更检测、失败重试、删除传播</td>
+</tr>
+<tr>
+<td>D47</td>
+<td>部署形态与扩容</td>
+<td><code>docker/</code>、<code>rag/svr/task_executor.py:204 signal_handler</code></td>
+<td>无状态/有状态边界在哪</td>
+</tr>
+<tr>
+<td>D48</td>
+<td>成本与容量估算</td>
+<td><code>rag/llm/model_meta.py</code></td>
+<td>模型元数据里有没有价格/上下文长度</td>
+</tr>
+<tr>
+<td>D49</td>
+<td>周复盘</td>
+<td><code>api/apps/</code> 整体</td>
+<td>你的架构图 v2 与它的差距</td>
+</tr>
+</tbody>
+</table>
+<h3 id="8">第 8 周<a class="headerlink" href="#8" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>主题</th>
+<th>锚点</th>
+<th>看什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D50</td>
+<td>Agentic RAG</td>
+<td><code>rag/advanced_rag/agentic_rag.py</code>、<code>agentic_rag_graph.py</code></td>
+<td>检索被改成可多次调用后的控制流</td>
+</tr>
+<tr>
+<td>D51</td>
+<td>检索原语工具化</td>
+<td><code>agent/tools/retrieval.py</code></td>
+<td>检索怎么变成 agent 的一个 tool</td>
+</tr>
+<tr>
+<td>D52</td>
+<td>GraphRAG 原理</td>
+<td><code>rag/graphrag/general/</code>（<code>graph_extractor.py</code>、<code>leiden.py</code>、<code>community_reports_extractor.py</code>）</td>
+<td>实体抽取、社区发现、社区摘要三步</td>
+</tr>
+<tr>
+<td>D53</td>
+<td>GraphRAG 边界</td>
+<td><code>rag/graphrag/light/graph_extractor.py</code>、<code>rag/graphrag/search.py:35 KGSearch</code></td>
+<td>轻量版砍掉了什么，为什么</td>
+</tr>
+<tr>
+<td>D54</td>
+<td>长上下文 vs RAG</td>
+<td><code>rag/prompts/generator.py:69 message_fit_in</code></td>
+<td>截断策略暴露的取舍</td>
+</tr>
+<tr>
+<td>D55</td>
+<td>进阶 demo + 基线</td>
+<td><code>rag/benchmark.py</code></td>
+<td>用它的评测口径对齐自己的基线</td>
+</tr>
+<tr>
+<td>D56</td>
+<td>总复盘</td>
+<td>全仓</td>
+<td>用自己的链路图逐环对照</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-40">5. 五个必读片段（信息密度最高，合计 40 分钟）<a class="headerlink" href="#5-40" title="Permanent link">&para;</a></h2>
+<p>按顺序读，每个都短：</p>
+<ol>
+<li><code>rag/app/naive.py:1123 chunk()</code>，一个函数吃进文件、吐出带元数据的块，所有切分讨论的落点。</li>
+<li><code>rag/nlp/search.py:717 retrieval()</code>，召回、融合、重排的唯一入口，读完就懂检索在工程上是什么。</li>
+<li><code>rag/prompts/generator.py:168 kb_prompt()</code>，检索结果变成 prompt 的那 20 行，<code>max_tokens</code> 裁剪就发生在这里。</li>
+<li><code>rag/svr/task_executor.py:1449 do_handle_task()</code>，写入链路的总调度，看它如何记录进度、失败重试。</li>
+<li><code>deepdoc/parser/pdf_parser.py:1108 _final_reading_order_merge()</code>，阅读顺序的启发式规则，比任何博客都具体。</li>
+</ol>
+<h2 id="6_1">6. 一条规则：源码只用来验证，不用来学概念<a class="headerlink" href="#6_1" title="Permanent link">&para;</a></h2>
+<p>先读论文和文档建立概念，再用源码回答它到底怎么实现的，不要反过来。</p>
+<ul>
+<li>学 HNSW，先跑自己的 FAISS 实验，再看 <code>init_kb</code> 里参数怎么填；</li>
+<li>学 BM25，先手写一遍，再看 <code>term_weight.py</code> 与 ES 查询；</li>
+<li>学重排，先算一次 cross-encoder 分，再看 <code>rerank_by_model</code> 怎么合成。</li>
+</ul>
+<p>反过来的结果是：记住了 RAGFlow 的字段名，却说不出原理。</p>
+<h2 id="7_1">7. 与每日计划的衔接<a class="headerlink" href="#7_1" title="Permanent link">&para;</a></h2>
+<p>每天读源码的预算 15–25 分钟，只读当天锚点那一个函数。超时就停，记一句没看懂的是 X，第二天再花 5 分钟补。</p>
+<p>记录写在 <code>learning-log.md</code>，格式：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>源码：rag/nlp/search.py:717 retrieval
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>看懂：三个分数怎么加权
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>没懂：vector_similarity_weight 为什么 0.3
+</code></pre></div>
+<h2 id="8_1">8. 版本提示<a class="headerlink" href="#8_1" title="Permanent link">&para;</a></h2>
+<ul>
+<li>本文件行号对应 v0.27.3；</li>
+<li>上游 v1.0.0 起改为 Go（<code>internal/deepdoc</code>、<code>internal/engine</code>、<code>internal/agentic_rag</code>），概念一一对应但代码结构不同；</li>
+<li>手上的教程和博客大多基于 0.1x–0.2x，其中 0.19 之前没有 <code>rag/graphrag/</code>，0.20 之后才有 <code>advanced_rag/</code>，对照时注意。</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>
